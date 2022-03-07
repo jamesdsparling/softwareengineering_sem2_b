@@ -3,7 +3,7 @@ const pool = new Pool({
     user: 'DefaultUser',
     host: 'expertsoftware.duckdns.org',
     database: 'SoftEng',
-    password: 'SecurePass',
+    password: '',
     port: 5432,
 })
 pool.query('SELECT NOW()', (err, res) => {
@@ -14,7 +14,7 @@ const client = new Client({
     user: 'DefaultUser',
     host: 'expertsoftware.duckdns.org',
     database: 'SoftEng',
-    password: 'SecurePass',
+    password: '',
     port: 5432,
 })
 client.connect()
