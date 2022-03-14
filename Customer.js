@@ -1,6 +1,7 @@
-class Customer {#
-    car;#
+class Customer {
+    car;
     balance;
+
     constructor(car, balance) {
         this.car = car;
         this.balance = balance;
