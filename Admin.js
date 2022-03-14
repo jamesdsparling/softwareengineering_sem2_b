@@ -1,16 +1,16 @@
-class Admin() {
-    profileID;
+class Admin {
+    profile_ID;
     password;
     email;
 
     constructor(profile_ID, password, email) {
-        this.profileID = profile_ID;
+        this.profile_ID = profile_ID;
         this.password = password;
         this.email = email;
     }
 
-    getProfileID() {
-        return this.profileID;
+    getProfile_ID() {
+        return this.profile_ID;
     }
 
     getPassword() {
