@@ -104,8 +104,6 @@ app.post("/api/auth/signin", function(req, res) {
                     res.send("Incorrect password")
                 }
             }
-            // End db connection
-            client.end()
         });
 
     }
@@ -124,9 +122,25 @@ app.post("/api/auth/signup", function(req, res) {
     // Just make sure they entered an email & password.
     // Don't really care about any of the other data yet.
     // firstname / lastname / phonenumber also available in req.body
-    // if (req.body.email && req.body.password) {
-    //     client.query
-    // }
+    if (req.body.email && req.body.password) {
+        client.query("INSERT INTO profile(email, pass) VALUES ($1, $2) RETURNING *", [req.body.email, req.body.password], (err, dbRes) => {
+            if (err) {
+                if (err.constraint == 'profile_email_key') {
+                    res.send("User with email " + req.body.email + " already exists.")
+                }
+                console.log(err.stack);
+            } else {
+                console.log("New user created")
+                console.log(dbRes.rows[0])
+
+                // express-session setup
+                req.session.loggedin = true;
+                req.session.email = req.body.email;
+
+                res.redirect('/dashboard');
+            }
+        })
+    }
 })
 
 app.listen(port, () => console.log("listening"));
