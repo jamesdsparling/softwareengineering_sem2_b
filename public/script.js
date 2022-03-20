@@ -3,7 +3,7 @@ function logIn() {
     data.email = $('#email').val();
     data.password = $('#password').val();
 
-    post('/signin', data);
+    post('/get_signin', data);
 }
 
 function post(path, data) {

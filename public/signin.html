@@ -12,18 +12,18 @@
 
 <body>
     <div class="log-in">
-        <form>
+        <form method="POST" action="/api/auth/signin">
             <h2>Sign in</h2>
             <label for="email">Email</label>
             <input type="email" name="email" id="email" placeholder="Email" required="">
 
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" placeholder="Password" required="" onclick="logIn()">
+            <input type="password" name="password" id="password" placeholder="Password" required="">
 
 
-            <button class="account" id="signin">Sign in</button>
-            <a class="sign" href=s ignup.html>Create an account</a>
-            <a class="sign" href=s ignup.html>Forgot Password?</a>
+            <input type="submit" class="account" id="signin" value="Sign in" />
+            <a class="sign" href='signup.html'>Create an account</a>
+            <a class="sign" href='signup.html'>Forgot Password?</a>
         </form>
     </div>
 </body>
