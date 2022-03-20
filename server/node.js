@@ -1,10 +1,13 @@
+const fs = require("fs")
+const buffer = fs.readFileSync("pass.txt")
+
 const { Pool, Client } = require('pg')
 
 const pool = new Pool({
     user: 'DefaultUser',
     host: 'expertsoftware.duckdns.org',
     database: 'SoftEng',
-    password: '',
+    password: buffer.toString,
     port: 5432,
 })
 
@@ -17,7 +20,7 @@ const client = new Client({
     user: 'DefaultUser',
     host: 'expertsoftware.duckdns.org',
     database: 'SoftEng',
-    password: '',
+    password: buffer.toString,
     port: 5432,
 })
 
