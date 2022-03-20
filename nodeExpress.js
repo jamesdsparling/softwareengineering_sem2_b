@@ -125,18 +125,25 @@ app.post("/api/auth/signup", function(req, res) {
     if (req.body.email && req.body.password) {
         client.query("INSERT INTO profile(email, pass) VALUES ($1, $2) RETURNING *", [req.body.email, req.body.password], (err, dbRes) => {
             if (err) {
+                // Most common error. User already exists.
                 if (err.constraint == 'profile_email_key') {
+                    // Just redirects for now, will be fixed alongside sign in incorrect password resubmission
                     res.send("User with email " + req.body.email + " already exists.")
+                } else {
+                    // Other errors printed to console as a stack trace
+                    console.log(err.stack);
                 }
-                console.log(err.stack);
             } else {
                 console.log("New user created")
+                    // Log the new user to the console
                 console.log(dbRes.rows[0])
 
-                // express-session setup
+                // Automatically logs in the user. No need to go back to signin.html anymore.
                 req.session.loggedin = true;
                 req.session.email = req.body.email;
 
+                // Attempt a dashboard redirect
+                // If login was unsuccessful this wil re-redirect to signin. (Possibly user has cookies disabled??)
                 res.redirect('/dashboard');
             }
         })

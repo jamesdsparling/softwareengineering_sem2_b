@@ -1,3 +1,13 @@
+/*
+
+THIS FILE IS NOT NEEDED ANYMORE!!
+Keeping it around because it's a good way to test sql query pooling 
+
+*/
+
+
+
+
 const fs = require("fs")
 const buffer = fs.readFileSync("pass.txt")
 
