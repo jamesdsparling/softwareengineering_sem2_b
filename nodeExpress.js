@@ -13,6 +13,16 @@ const port = 3000;
 // pass.txt should be in root directory containing ONLY 1 LINE with the password for postgres
 const buffer = fs.readFileSync("pass.txt");
 
+// DB connection client setup
+const client = new Client({
+    user: "DefaultUser",
+    host: "expertsoftware.duckdns.org",
+    database: "SoftEng",
+    password: buffer.toString(), // pass.txt (See gitignore commit messages)
+    port: 5432,
+});
+client.connect();
+
 // Parse urlencoded payloads
 app.use(
     express.urlencoded({
@@ -63,18 +73,6 @@ app.get("/dashboard", function(req, res) {
 app.post("/api/auth/signin", function(req, res) {
     // Ensure input fields not empty
     if (req.body.email && req.body.password) {
-
-        // DB connection client setup
-        const client = new Client({
-            user: "DefaultUser",
-            host: "expertsoftware.duckdns.org",
-            database: "SoftEng",
-            password: buffer.toString(), // pass.txt (See gitignore commit messages)
-            port: 5432,
-        });
-
-        client.connect();
-
         // Query id and password for user with given email
         client.query("SELECT profile_id, pass FROM profile WHERE email = $1", [req.body.email], (err, dbRes) => {
             if (err) {
@@ -121,5 +119,14 @@ app.post("/api/auth/signout", function(req, res) {
     // DO NOT CHANGE THIS PLEASE, CHANGE THE GET LISTENER INSTEAD
     res.redirect("/");
 });
+
+app.post("/api/auth/signup", function(req, res) {
+    // Just make sure they entered an email & password.
+    // Don't really care about any of the other data yet.
+    // firstname / lastname / phonenumber also available in req.body
+    // if (req.body.email && req.body.password) {
+    //     client.query
+    // }
+})
 
 app.listen(port, () => console.log("listening"));
