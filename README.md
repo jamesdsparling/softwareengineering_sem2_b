@@ -2,8 +2,8 @@
 Software Engineering, Sem2, B
 
 ## Contributors
-Alex Uttin
-Alexander Doye
-Chiquita Kamara
-El Southwood
-James Sparling
+- Alex Uttin
+- Alexander Doye
+- Chiquita Kamara
+- El Southwood
+- James Sparling
