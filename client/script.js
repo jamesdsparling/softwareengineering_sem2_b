@@ -16,6 +16,9 @@ function post(path, data) {
         success: function(rt) {
             console.log(rt);
             window.location.href = "main.html";
+        },
+        error: function(xhr, status, err) {
+            alert("Error: Problem connecting to the server!")
         }
     })
 }
