@@ -70,6 +70,10 @@ app.get("/dashboard", function(req, res) {
     }
 });
 
+app.get("/tickets", function(req, res) {
+    res.sendFile(path.join(__dirname, "/UserPages/ManageTickets.html"))
+})
+
 app.post("/api/auth/signin", function(req, res) {
     // Ensure input fields not empty
     if (req.body.email && req.body.password) {
