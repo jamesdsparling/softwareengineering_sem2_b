@@ -2,11 +2,47 @@
 <html lang="en">
 
 <head>
-    <title>Parking Management System</title>
-    <link rel="stylesheet" href="pms.css">
+    <title>Account Creation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheet3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif
+        }
+        
+        .w3-bar,
+        h1,
+        button {
+            font-family: "Montserrat", sans-serif
+        }
+    </style>
 </head>
 
 <body>
+
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-large">
+            <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a href="Homepage.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Home</a>
+            <a href="signin.html" class="w3-bar-item w3-button w3-padding-large w3-white">Login</a>
+        </div>
+    </div>
+
+    <!--Header-->
+    <header class="w3-container w3-blue w3-center" style="padding:128px 16px">
+        <h1 class="w3-margin w3-jumbo">UEA Parking</h1>
+    </header>
+
     <div class="log-in">
         <form method="POST" action="/api/auth/signup">
             <h2>Create an account</h2>
@@ -27,15 +63,29 @@
             <input type="password" name="password" placeholder="Password" required="">
 
             <label for="password">Confirm Password</label>
-            <input type="password" name="password2" placeholder="Confirm password" required="">
+            <input type="password" name="password" placeholder="Confirm password" required="">
 
-            <button class="account">Create account</button>
+            <input type="submit" class="account" id="signin" value="Sign up" />
 
-            <a class="sign" href='signin.html'>Already have an account? sign in</a>
+            <a class="sign" href="signin.html">Already have an account? sign in</a>
         </form>
     </div>
+
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+        <p>Created by Group 33 </p>
+    </footer>
 </body>
 
 </html>
-
-<!-- /*TO DO: Next button// show hide or just have a scroll Layout*/ -->

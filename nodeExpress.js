@@ -48,7 +48,7 @@ app.use(
 // Probably replace with an index type page once it has been made
 // Displayed page MUST offer a link to sign in/up 
 app.get("/", function(req, res) {
-    res.redirect("/dashboard"); // redirect("/index") ??? or maybe always attempt dashboard and redirect to index if not logged in
+    res.redirect("/Homepage.html"); // redirect("/index") ??? or maybe always attempt dashboard and redirect to index if not logged in
 });
 
 // Handle root address. Page served varies depending 
@@ -58,10 +58,10 @@ app.get("/dashboard", function(req, res) {
         //Check if admin
         if (req.session.admin) {
             // Logged in && admin
-            res.sendFile(path.join(__dirname, "/private/adminDashboard.html"));
+            res.sendFile(path.join(__dirname, "/AdminPages/AdminViewMain.html"));
         } else {
             // Logged in && !admin
-            res.sendFile(path.join(__dirname, "/private/main.html"));
+            res.sendFile(path.join(__dirname, "/UserPages/UserView.html"));
         }
     } else {
         // Not logged in (not admin obviously)
