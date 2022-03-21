@@ -15,8 +15,8 @@ const buffer = fs.readFileSync("pass.txt");
 
 // DB connection client setup
 const client = new Client({
-    user: "DefaultUser",
-    host: "expertsoftware.duckdns.org",
+    user: "defaultuser",
+    host: "localhost",
     database: "SoftEng",
     password: buffer.toString(), // pass.txt (See gitignore commit messages)
     port: 5432,
@@ -81,7 +81,7 @@ app.post("/api/auth/signin", function(req, res) {
                 console.log(err.stack)
             } else {
                 // Really bad code here. Rushed. Very insecure. Will change later 
-                if (req.body.password == dbRes.rows[0].pass) { // Plain text password checking :( TODO
+                if (dbRes.rows[0] && req.body.password == dbRes.rows[0].pass) { // Plain text password checking :( TODO
                     console.log("Sigining in: " + req.body.email);
 
                     // express-session setup
@@ -90,7 +90,7 @@ app.post("/api/auth/signin", function(req, res) {
 
                     // Assuming admin has id 0. Works so long as only ever one admin.
                     // Might be worth storing this info in the database so that the admin user can be changed easily. Will look into this.
-                    if (dbRes.rows[0].profile_id == 'pf_0') {
+                    if (dbRes.rows[0].profile_id == 1) {
                         console.log("Signed in as admin user")
                         req.session.admin = true;
                     } else {
@@ -101,7 +101,7 @@ app.post("/api/auth/signin", function(req, res) {
                 } else {
                     // Causes a redirect for now. Form resubmission is an issue and not a good UX
                     // Will look in to some kind of jquery implementation instead
-                    res.send("Incorrect password")
+                    res.send("Incorrect email or password")
                 }
             }
         });
