@@ -23,6 +23,26 @@ const client = new Client({
 });
 client.connect();
 
+function presentWithAccess(client, public, user, admin) {
+    app.get(client, function(req, res) {
+        //Check if logged in
+        if (req.session.loggedin) {
+            //Check if admin
+            if (req.session.admin) {
+                // Logged in && admin
+                res.sendFile(path.join(__dirname, admin));
+            } else {
+                // Logged in && !admin
+                res.sendFile(path.join(__dirname, user));
+            }
+        } else {
+            // Not logged in (not admin obviously)
+            // Could possibly direct to index page but I like this implementation as users can bookmark the dashboard for easy access
+            res.redirect(public);
+        }
+    })
+}
+
 // Parse urlencoded payloads
 app.use(
     express.urlencoded({
@@ -52,26 +72,11 @@ app.get("/", function(req, res) {
 });
 
 // Handle root address. Page served varies depending 
-app.get("/dashboard", function(req, res) {
-    //Check if logged in
-    if (req.session.loggedin) {
-        //Check if admin
-        if (req.session.admin) {
-            // Logged in && admin
-            res.sendFile(path.join(__dirname, "/AdminPages/AdminViewMain.html"));
-        } else {
-            // Logged in && !admin
-            res.sendFile(path.join(__dirname, "/UserPages/UserView.html"));
-        }
-    } else {
-        // Not logged in (not admin obviously)
-        // Could possibly direct to index page but I like this implementation as users can bookmark the dashboard for easy access
-        res.redirect("signin.html");
-    }
-});
+presentWithAccess("/dashboard", "signin.html", "/UserPages/UserView.html", "/AdminPages/AdminViewMain.html")
+presentWithAccess("/tickets", "signin.html", "/UserPages/ManageTicket.html", "/AdminPages/AdminTicketReq.html")
 
 app.get("/tickets", function(req, res) {
-    res.sendFile(path.join(__dirname, "/UserPages/ManageTickets.html"))
+    res.sendFile(path.join(__dirname, "/UserPages/ManageTicket.html"))
 })
 
 app.post("/api/auth/signin", function(req, res) {
