@@ -74,6 +74,13 @@ app.get("/", function(req, res) {
 // Handle root address. Page served varies depending 
 presentWithAccess("/dashboard", "signin.html", "/UserPages/UserView.html", "/AdminPages/AdminViewMain.html")
 presentWithAccess("/tickets", "signin.html", "/UserPages/ManageTicket.html", "/AdminPages/AdminTicketReq.html")
+presentWithAccess("/help", "signin.html", "/UserPages/UserGetHelp.html", "/AdminPages/AdminViewMain.html")
+presentWithAccess("/addbalance", "signin.html", "/UserPages/AddBalance.html", "/AdminPages/AdminViewMain.html")
+presentWithAccess("/settings", "signin.html", "/UserPages/UserSettings.html", "/AdminPages/AdminViewMain.html")
+presentWithAccess("/messages", "signin.html", "/UserPages/UserMessages.html", "/AdminPages/AdminMessages.html")
+presentWithAccess("/map", "signin.html", "/UserPages/UserView.html", "/AdminPages/ManageMap.html")
+presentWithAccess("/modifyuser", "signin.html", "/UserPages/UserView.html", "/AdminPages/ModifyUser.html")
+
 
 app.get("/tickets", function(req, res) {
     res.sendFile(path.join(__dirname, "/UserPages/ManageTicket.html"))
