@@ -164,7 +164,7 @@ app.post("/api/auth/signup", function(req, res) {
     }
 })
 
-app.post("/api/me/tickets") {
+app.post("/api/me/tickets", function(req, res) {
     client.query("SELECT * FROM ticket(ticket_id, start_time, end_time) WHERE ticet.profile_id == $1", [req.session.profile_id], (err, dbRes) => {
         if (err) {
             console.log(err.stack)
@@ -172,6 +172,6 @@ app.post("/api/me/tickets") {
             res.send(dbRes.rows)
         }
     })
-}
+})
 
 app.listen(port, () => console.log("listening"));
