@@ -1,6 +1,7 @@
 // Req statements
 const express = require("express");
 const session = require("express-session");
+const res = require("express/lib/response");
 const fs = require("fs");
 const path = require("path");
 const { Client } = require("pg");
@@ -82,10 +83,6 @@ presentWithAccess("/map", "signin.html", "/UserPages/UserView.html", "/AdminPage
 presentWithAccess("/modifyuser", "signin.html", "/UserPages/UserView.html", "/AdminPages/ModifyUser.html")
 
 
-app.get("/tickets", function(req, res) {
-    res.sendFile(path.join(__dirname, "/UserPages/ManageTicket.html"))
-})
-
 app.post("/api/auth/signin", function(req, res) {
     // Ensure input fields not empty
     if (req.body.email && req.body.password) {
@@ -103,6 +100,7 @@ app.post("/api/auth/signin", function(req, res) {
                     // express-session setup
                     req.session.loggedin = true;
                     req.session.email = req.body.email;
+                    req.session.profile_id = dbRes.rows[0].profile_id
 
                     // Assuming admin has id 0. Works so long as only ever one admin.
                     // Might be worth storing this info in the database so that the admin user can be changed easily. Will look into this.
@@ -155,15 +153,25 @@ app.post("/api/auth/signup", function(req, res) {
                 console.log(dbRes.rows[0])
 
                 // Automatically logs in the user. No need to go back to signin.html anymore.
-                req.session.loggedin = true;
-                req.session.email = req.body.email;
+                // req.session.loggedin = true;
+                // req.session.email = req.body.email;
 
                 // Attempt a dashboard redirect
                 // If login was unsuccessful this wil re-redirect to signin. (Possibly user has cookies disabled??)
-                res.redirect('/dashboard');
+                res.redirect('/');
             }
         })
     }
 })
+
+app.post("/api/me/tickets") {
+    client.query("SELECT * FROM ticket(ticket_id, start_time, end_time) WHERE ticet.profile_id == $1", [req.session.profile_id], (err, dbRes) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            res.send(dbRes.rows)
+        }
+    })
+}
 
 app.listen(port, () => console.log("listening"));
