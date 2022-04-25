@@ -164,8 +164,35 @@ app.post("/api/auth/signup", function(req, res) {
     }
 })
 
+app.post("/api/createTicket", function(req, res) {
+    if (req.body.start_time, req.body.end_time, req.body.space_id) {
+        client.query("INSERT INTO tickets(start_time, end_time, space_id) VALUES ($1, $2, $3) RETURNING *", [req.body.start_time, req.body.end_time, req.body.space_id], (err, dbRes) => {
+            if (err) {
+                console.log(err.stack)
+            } else {
+                console.log("New ticket created")
+                console.log(dbRes.rows[0])
+                res.redirect("/dashboard")
+            }
+        })
+    }
+})
+
+app.post("/api/admin/manageTicket", function(req, res) {
+    if (req.body.ticket_id, req.body.status) {
+        client.query("UPDATE tickets SET status = $1 WHERE ticket_id = $2 RETURNING *", [req.body.status, req.body.ticket_id], (err, dbRes) => {
+            if (err) {
+                console.log(err.stack)
+            } else {
+                console.log("Ticket status updated")
+                console.log(dbRes.rows[0])
+                res.redirect("/dashboard")
+            }
+        })
+    }
+})
+
 app.post("/api/me/tickets", function(req, res) {
-    console.log("here")
     client.query("SELECT ticket_id, start_time, end_time FROM ticket WHERE ticket.profile_id = $1", [req.session.profile_id], (err, dbRes) => {
         if (err) {
             console.log(err.stack)
