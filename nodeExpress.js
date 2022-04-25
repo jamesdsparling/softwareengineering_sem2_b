@@ -165,7 +165,8 @@ app.post("/api/auth/signup", function(req, res) {
 })
 
 app.post("/api/me/tickets", function(req, res) {
-    client.query("SELECT * FROM ticket(ticket_id, start_time, end_time) WHERE ticet.profile_id == $1", [req.session.profile_id], (err, dbRes) => {
+    console.log("here")
+    client.query("SELECT ticket_id, start_time, end_time FROM ticket WHERE ticket.profile_id = $1", [req.session.profile_id], (err, dbRes) => {
         if (err) {
             console.log(err.stack)
         } else {
