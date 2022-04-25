@@ -178,7 +178,7 @@ app.post("/api/createTicket", function(req, res) {
     }
 })
 
-app.post("/api/admin/manageTicket", function(req, res) {
+app.post("/api/admin/updateTicket", function(req, res) {
     if (req.body.ticket_id, req.body.status) {
         client.query("UPDATE tickets SET status = $1 WHERE ticket_id = $2 RETURNING *", [req.body.status, req.body.ticket_id], (err, dbRes) => {
             if (err) {
@@ -201,5 +201,28 @@ app.post("/api/me/tickets", function(req, res) {
         }
     })
 })
+
+app.post("/api/admin/updateProfile", function(req, res) {
+    if (req.body.profile_id) {
+        if (req.body.email) {
+            updateProfile("email", req.body.email, req.body.profile_id)
+        }
+        if (req.body.pass) {
+            updateProfile("pass", req.body.pass, req.body.profile_id)
+        }
+    }
+})
+
+function updateProfile(profile_id, field, value) {
+    client.query("UPDATE profile SET $1 = $2 WHERE profile_id = $2 RETURNING *", [field, value, profile_id], (err, dbRes) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            console.log("Profile updated")
+            console.log(dbRes.rows[0])
+            res.redirect("/dashboard")
+        }
+    })
+}
 
 app.listen(port, () => console.log("listening"));
