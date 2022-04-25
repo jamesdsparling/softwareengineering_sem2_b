@@ -202,6 +202,44 @@ app.post("/api/me/tickets", function(req, res) {
     })
 })
 
+app.post("/api/me/messages", function(req, res) {
+    client.query("SELECT * FROM messages WHERE from_profile = $1 OR to_profile = $1", [req.session.profile_id], (err, dbRes) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            res.send(dbRes.rows)
+        }
+    })
+})
+
+app.post("/api/sendMessage", function(req, res) {
+    if (req.body.message) {
+        client.query("INSERT INTO messages(message, from_profile, to_profile) VALUES ($1, $2, $3) RETURNING *", [req.body.message, req.session.profile_id, 1], (err, dbRes) => {
+            if (err) {
+                console.log(err.stack)
+            } else {
+                console.log("Sent message")
+                console.log(dbRes.rows[0])
+                res.redirect("/dashboard")
+            }
+        })
+    }
+})
+
+app.post("/api/admin/sendMessage", function(req, res) {
+    if (req.body.message, to_profile) {
+        client.query("INSERT INTO messages(message, from_profile, to_profile) VALUES ($1, $2, $3) RETURNING *", [req.body.message, 1, req.body.to_profile], (err, dbRes) => {
+            if (err) {
+                console.log(err.stack)
+            } else {
+                console.log("Sent message")
+                console.log(dbRes.rows[0])
+                res.redirect("/dashboard")
+            }
+        })
+    }
+})
+
 app.post("/api/admin/updateProfile", function(req, res) {
     if (req.body.profile_id) {
         if (req.body.email) {
