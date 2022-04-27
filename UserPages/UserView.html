@@ -18,7 +18,7 @@
         h6 {
             font-family: "Lato", sans-serif
         }
-        
+
         .w3-bar,
         h1,
         button {
@@ -26,7 +26,7 @@
         }
     </style>
 </head>
-
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <body>
     <!-- Navbar -->
     <div class="w3-top">
@@ -43,8 +43,65 @@
         <!-- Header -->
         <header class="w3-container w3-blue w3-center" style="padding:384px 16px">
         </header>
+        <div class="Booking">
+            <form method="POST" action="/api/auth/Booking" id="bookingform">
+                <h2>Book Parking Space</h2>
 
-        <!-- Footer -->
+                <label for="carpark">Choose a carpark:</label>
+            <select id="carpark" name="carpark">
+            <option value="Main">Main Car Park</option>
+            </select>
+
+            <label> Space ID:</label>
+        <input type="number" min="1" max="100" value="1">
+
+            <label>Date:</label>
+            <input name="somedate" type="date">
+
+                <script language="javascript">
+                var today = new Date().toISOString().split('T')[0];
+                document.getElementsByName("somedate")[0].setAttribute('min', today);
+                </script>
+
+              <label for="appt">Select a time:</label>
+              <input type="time" id="appt" name="appt" required="">
+
+              <label for="Hours">Booking length </label>
+              <select id="hours" onChange="update()">
+                <option value="None">Select Booking Length</option>
+                <option value="£4">1 hour</option>
+                <option value="£6">2 hours</option>
+                <option value="£11">3 hours</option>
+                <option value="£18">4 hours</option>
+                <option value="£28">5 hours</option>
+                <option value="£39">6 hours</option>
+                <option value="£52">7 hours</option>
+              </select>
+
+                <label>Booking Price </label>
+                <input id="value">
+
+                  <script type="text/javascript">
+                    function update() {
+                    var select = document.getElementById('hours');
+                    var option = select.options[select.selectedIndex];
+
+                      document.getElementById('value').value = option.value;
+                    }
+
+                    update();
+                  </script>
+
+
+
+                <button class="booking">Submit Booking</button>
+
+
+                <a class="sign" href='Messages.html'>Having Booking Issues? Message Admin</a>
+            </form>
+        </div>
+
+        <<!-- Footer -->
         <footer class="w3-container w3-padding-64 w3-center w3-opacity">
             <p>Created by Group 33 </p>
         </footer>
