@@ -4,6 +4,9 @@
 <head>
     <title>Parking Management System</title>
     <link rel="stylesheet" href="pms.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -34,8 +37,40 @@
             <a class="sign" href='signin.html'>Already have an account? sign in</a>
         </form>
     </div>
+
 </body>
+<footer>
+<div class="wrapper">
+   <img src="#" alt="">
+   <div class="content">
+     <header>Allow Cookies</header>
+     <p>We and a select group of trusted partners, known as 'Vendors', need your consent for data-processing purposes. These purposes include to store and/or access information on a device, like cookie management and to process personal data such as standard information sent by a device and other unique identifiers for personalised ads and content, ad and content measurement, audience insights and product development. With your consent we and our partners may use precise geolocation data and actively scan device characteristics for identification.
 
+You may consent to the processing described above or access more detailed information and customise your choices. The given consent will apply to this site only. Please take into consideration that some of your personal data processing may rely on legitimate interest which does not require your consent but you have a right to object to this.
+
+You can always edit your preferences at any time in our site’s privacy policy page</p>
+     <div class="buttons">
+       <button class="item">I understand</button>
+       <a href="#" class="item">Learn more</a>
+     </div>
+   </div>
+ </div>
+
+ <script>
+     const cookieBox = document.querySelector(".wrapper"),
+     acceptBtn = cookieBox.querySelector("button");
+     acceptBtn.onclick = ()=>{
+
+       document.cookie = "CookieBy=CodingNepal; max-age="+60*60*24*30;
+       if(document.cookie){
+         cookieBox.classList.add("hide");
+       }else{
+         alert("Cookie can't be set! Please unblock this site from the cookie setting of your browser.");
+       }
+     }
+     let checkCookie = document.cookie.indexOf("CookieBy=CodingNepal");
+     checkCookie != -1 ? cookieBox.classList.add("hide") : cookieBox.classList.remove("hide");
+   </script>
+
+</footer>
 </html>
-
-<!-- /*TO DO: Next button// show hide or just have a scroll Layout*/ -->
