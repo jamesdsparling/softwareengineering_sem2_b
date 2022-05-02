@@ -18,7 +18,7 @@
         h6 {
             font-family: "Lato", sans-serif
         }
-        
+
         .w3-bar,
         h1,
         button {
@@ -39,10 +39,46 @@
             <a href="/messages" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Messages</a>
         </div>
 
-        <!-- Header -->
+        <!-- Header
         <header class="w3-container w3-blue w3-center" style="padding:384px 16px">
-        </header>
+        </header>-->
 
+        <div id="selectUser">
+          <form class="update">
+            <h2>Update user details</h2>
+
+            <h3>Select which user's details to update</h3>
+            <label for="firstname">User's first name</label>
+            <input type="text" name="firstname" placeholder="First Name">
+
+            <label for="lastname">User's Last Name</label>
+            <input type="text" name="lastname" placeholder="Last Name">
+            <input type="submit" id="submit" value="Check user exists" />
+          </form>
+        </div>
+
+        <div id="changeDetails">
+          <form class=update>
+            <h3>Change details</h3>
+
+            <label for="firstname">Change First Name</label>
+            <input type="text" name="firstname" placeholder="First Name">
+
+            <label for="lastname">Change Last Name</label>
+            <input type="text" name="lastname" placeholder="Last Name">
+
+            <label for="email">Change Email</label>
+            <input type="email" name="email" placeholder="Email">
+
+            <label for="phonenumber">Change Phone Number</label>
+            <input type="tel" name="phonenumber" placeholder="Phone Number">
+
+            <label for="password">Change Password</label>
+            <input type="password" name="password" placeholder="Password">
+
+            <input type="submit" id="submit" value="Change details" />
+          </form>
+        </div>
         <!-- Footer -->
         <footer class="w3-container w3-padding-64 w3-center w3-opacity">
             <p>Created by Group 33 </p>
