@@ -165,11 +165,16 @@ app.post("/api/auth/signup", function(req, res) {
 })
 
 app.post("/api/createTicket", function(req, res) {
-    if (req.body.start_time, req.body.end_time, req.body.space_id) {
-        client.query("INSERT INTO tickets(start_time, end_time, space_id) VALUES ($1, $2, $3) RETURNING *", [req.body.start_time, req.body.end_time, req.body.space_id], (err, dbRes) => {
+    // Check if balance is enough
+    if (req.body.start_time, req.body.length, req.body.space_id) {
+        // Maybe subtract in same query??o
+        let end_time = start_time + length
+        console.log(length)
+        client.query("INSERT INTO tickets(start_time, end_time, space_id) VALUES ($1, $2, $3) RETURNING *", [req.body.start_time, end_time, req.body.space_id], (err, dbRes) => {
             if (err) {
                 console.log(err.stack)
             } else {
+                // Subtract from balance
                 console.log("New ticket created")
                 console.log(dbRes.rows[0])
                 res.redirect("/dashboard")
@@ -250,6 +255,8 @@ app.post("/api/admin/updateProfile", function(req, res) {
         }
     }
 })
+
+app.post("/api/getSpaces")
 
 function updateProfile(profile_id, field, value) {
     client.query("UPDATE profile SET $1 = $2 WHERE profile_id = $2 RETURNING *", [field, value, profile_id], (err, dbRes) => {
