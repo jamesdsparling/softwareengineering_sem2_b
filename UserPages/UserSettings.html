@@ -41,44 +41,44 @@
 
         </div>
 
-       <!-- Header-->
+        <!-- Header-->
         <!--<header class="w3-container w3-blue w3-center">-->
-          <!-- User can add a number plate -->
-          <p class="usersettings" onclick="document.getElementById('numplate').style.display = 'block'">Add number plate</p>
+        <!-- User can add a number plate -->
+        <p class="usersettings" onclick="document.getElementById('numplate').style.display = 'block'">Add number plate</p>
 
-          <div id="numplate">
-            <form class="settings">
+        <div id="numplate">
+            <form class="settings" method="POST" action="/api/me/updatePlate">
 
-              <label for="Number plate">Number plate</label>
-              <input type="text" name="registration plate" placeholder="number plate" required="">
+                <label for="Number plate">Number plate</label>
+                <input type="text" name="registration_plate" placeholder="number plate" required="">
 
 
-              <input type="submit" id="submit" value="Add" />
+                <input type="submit" id="submit" value="Add" />
 
             </form>
-          </div>
+        </div>
 
-          <!-- User can add a payment method-->
-          <p class="usersettings" onclick="document.getElementById('paymentmethod').style.display = 'block'">Add payment method</p>
+        <!-- User can add a payment method-->
+        <p class="usersettings" onclick="document.getElementById('paymentmethod').style.display = 'block'">Add payment method</p>
 
-          <div id="paymentmethod">
-            <form class="settings">
+        <div id="paymentmethod">
+            <form class="settings" method="POST" action="/api/me/updateCard">
 
-              <label for="fullname">Name on bank card</label>
-              <input type="text" name="fullname" placeholder="name" required="">
+                <label for="fullname">Name on bank card</label>
+                <input type="text" name="fullname" placeholder="name" required="">
 
-              <label for="cardnumber">Card number</label>
-              <input type="number" name="cardnumber" placeholder="card number" required="">
+                <label for="cardnumber">Card number</label>
+                <input type="number" name="cardnumber" placeholder="card number" required="">
 
-              <label for="expiry">Expiry date</label>
-              <input type="month" name="expiry" placeholder="expiry date" min="2022-04" required="">
+                <label for="expiry">Expiry date</label>
+                <input type="month" name="expiry" placeholder="expiry date" min="2022-04" required="">
 
-              <label for="cvv">CVV number</label>
-              <input type="number" name="cvv" placeholder="cvv" min="2022-04" required="">
-              <input type="submit" id="submit" value="Add" />
+                <label for="cvv">CVV number</label>
+                <input type="number" name="cvv" placeholder="cvv" min="2022-04" required="">
+                <input type="submit" id="submit" value="Add" />
 
-          </form>
-          </div>
+            </form>
+        </div>
 
         <!--</header>-->
 

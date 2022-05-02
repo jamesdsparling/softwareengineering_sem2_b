@@ -10,6 +10,8 @@ create table profile (
 	pass varchar(50) not null,
 	balance int,
 	car varchar(16)
+    cardnum varchar(16)
+    
 );
 
 create table parking_space (

@@ -183,6 +183,20 @@ app.post("/api/createTicket", function(req, res) {
     }
 })
 
+app.post("/api/me/updatePlate", function(req, res) {
+    if (req.body.registration_plate) {
+        client.query("UPDATE profile SET registration_plate = $1 WHERE profile_id = $2 RETURNING *", [req.body.registration_plate, req.session.profile_id], (err, dbRes) => {
+            if (err) {
+                console.log(err.stack)
+            } else {
+                console.log("Registration plate updated")
+                console.log(dbRes.rows[0])
+                res.redirect('back')
+            }
+        })
+    }
+})
+
 app.post("/api/admin/updateTicket", function(req, res) {
     if (req.body.ticket_id, req.body.status) {
         client.query("UPDATE tickets SET status = $1 WHERE ticket_id = $2 RETURNING *", [req.body.status, req.body.ticket_id], (err, dbRes) => {
