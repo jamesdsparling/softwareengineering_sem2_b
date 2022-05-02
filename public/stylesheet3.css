@@ -499,4 +499,48 @@ button {
 div {
     display: block;
 }
+#numplate{
+	display:none
+}
 
+#paymentmethod{
+	display:none
+}
+
+.usersettings{
+  font-size: 16px;
+  padding: 10px;
+  background-color: #607d8b;
+  color: white;
+  border: solid 1px;
+  margin: auto;
+}
+
+.settings{
+  display: block;
+  margin-top: 0em;
+	transform: none;
+	position: static;
+	background-color: transparent;
+	box-shadow: none;
+	padding: 0px;
+}
+.settings *{
+	color: black;
+	outline: black;
+	border: medium none color;
+}
+.settings label{
+	margin-top: 0;
+}
+.settings input {
+	height: auto;
+	width: 100%;
+	background-color: transparent;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	margin-top: 0px;
+	border-radius: 1px;
+	border: 1px solid black;
+}
