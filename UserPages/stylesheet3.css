@@ -314,6 +314,15 @@ input{
 	border-radius: 5px;
 }
 
+select{
+    display: block;
+    height: 10%;
+    width: 100%;
+    background-color: #404D4F;
+    margin-top: 10px;
+	border-radius: 5px;
+}
+
 ::placeholder{
     color: #F2F5F8;
 }
@@ -327,6 +336,21 @@ input{
     font-size: 16px;
     font-weight: bold;
     border-radius: 30px;
+}
+
+.booking{
+    margin-top: 50px;
+    width: 100%;
+    background-color: #6D8FB0;
+    color: #252C2D;
+    padding: 15px 0;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 30px;
+}
+.totalPrice{
+    display: block;
+    margin-top: 10%;
 }
 
 .sign{
@@ -475,3 +499,4 @@ button {
 div {
     display: block;
 }
+

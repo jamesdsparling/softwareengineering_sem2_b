@@ -1,38 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>User Dashboard</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="stylesheet3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
-</style>
+    <title>User Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheet3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif
+        }
+
+        .w3-bar,
+        h1,
+        button {
+            font-family: "Montserrat", sans-serif
+        }
+    </style>
 </head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <body>
-  <!-- Navbar -->
-  <div class="w3-top">
-    <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-large">
-      <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-blue-grey" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-      <a href="UserView.html" class="w3-bar-item w3-button w3-padding-large w3-white">Dashboard</a>
-      <a href="ManageTicket.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Manage Tickets</a>
-      <a href="UserGetHelp.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Get Help</a>
-      <a href="AddBalance.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Add Balance</a>
-      <a href="UserSettings.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Settings</a>
-      <a href="UserMessages.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Messages</a>
-    </div>
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-large">
+            <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-blue-grey" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a href="/dashboard" class="w3-bar-item w3-button w3-padding-large w3-white">Dashboard</a>
+            <a href="/tickets" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Manage Tickets</a>
+            <a href="/help" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Get Help</a>
+            <a href="/addbalance" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Add Balance</a>
+            <a href="/settings" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Settings</a>
+            <a href="/messages" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Messages</a>
+        </div>
 
-    <!-- Header -->
-    <header class="w3-container w3-blue w3-center" style="padding:384px 16px">
-    </header>
+        <!-- Header -->
+        <header class="w3-container w3-blue w3-center" style="padding:384px 16px">
+        </header>
+        <div class="Booking">
+            <form method="POST" action="/api/auth/Booking" id="bookingform">
+                <h2>Book Parking Space</h2>
 
-  <!-- Footer -->
-  <footer class="w3-container w3-padding-64 w3-center w3-opacity">
-    <p>Created by Group 33 </p>
-  </footer>
+                <label for="carpark">Choose a carpark:</label>
+            <select id="carpark" name="carpark">
+            <option value="Main">Main Car Park</option>
+            </select>
+
+            <label> Space ID:</label>
+        <input type="number" min="1" max="100" value="1">
+
+            <label>Date:</label>
+            <input name="somedate" type="date">
+
+                <script language="javascript">
+                var today = new Date().toISOString().split('T')[0];
+                document.getElementsByName("somedate")[0].setAttribute('min', today);
+                </script>
+
+              <label for="appt">Select a time:</label>
+              <input type="time" id="appt" name="appt" required="">
+
+              <label for="Hours">Booking length </label>
+              <select id="hours" onChange="update()">
+                <option value="None">Select Booking Length</option>
+                <option value="£4">1 hour</option>
+                <option value="£6">2 hours</option>
+                <option value="£11">3 hours</option>
+                <option value="£18">4 hours</option>
+                <option value="£28">5 hours</option>
+                <option value="£39">6 hours</option>
+                <option value="£52">7 hours</option>
+              </select>
+
+                <label>Booking Price </label>
+                <input id="value">
+
+                  <script type="text/javascript">
+                    function update() {
+                    var select = document.getElementById('hours');
+                    var option = select.options[select.selectedIndex];
+
+                      document.getElementById('value').value = option.value;
+                    }
+
+                    update();
+                  </script>
+
+
+
+                <button class="booking">Submit Booking</button>
+
+
+                <a class="sign" href='Messages.html'>Having Booking Issues? Message Admin</a>
+            </form>
+        </div>
+
+        <<!-- Footer -->
+        <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+            <p>Created by Group 33 </p>
+        </footer>
 
 </body>
 

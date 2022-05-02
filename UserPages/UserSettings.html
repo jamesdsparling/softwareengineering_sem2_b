@@ -1,39 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>User Settings</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="stylesheet3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
-</style>
+    <title>User Settings</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheet3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif
+        }
+        
+        .w3-bar,
+        h1,
+        button {
+            font-family: "Montserrat", sans-serif
+        }
+    </style>
 </head>
+
 <body>
-  <!-- Navbar -->
-  <div class="w3-top">
-    <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-large">
-      <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-blue-grey" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-      <a href="UserView.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Dashboard</a>
-      <a href="ManageTicket.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Manage Tickets</a>
-      <a href="UserGetHelp.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Get Help</a>
-      <a href="AddBalance.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Add Balance</a>
-      <a href="UserSettings.html" class="w3-bar-item w3-button w3-padding-large w3-white">Settings</a>
-      <a href="UserMessages.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Messages</a>
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-large">
+            <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-blue-grey" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a href="/dashboard" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Dashboard</a>
+            <a href="/tickets" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Manage Tickets</a>
+            <a href="/help" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Get Help</a>
+            <a href="/addbalance" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Add Balance</a>
+            <a href="/settings" class="w3-bar-item w3-button w3-padding-large w3-white">Settings</a>
+            <a href="/messages" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Messages</a>
 
-    </div>
+        </div>
 
-    <!-- Header -->
-    <header class="w3-container w3-blue w3-center" style="padding:384px 16px">
-    </header>
+       <!-- Header-->
+        <!--<header class="w3-container w3-blue w3-center">-->
+          <!-- User can add a number plate -->
+          <p class="usersettings" onclick="document.getElementById('numplate').style.display = 'block'">Add number plate</p>
 
-  <!-- Footer -->
-  <footer class="w3-container w3-padding-64 w3-center w3-opacity">
-    <p>Created by Group 33 </p>
-  </footer>
+          <div id="numplate">
+            <form class="settings">
+
+              <label for="Number plate">Number plate</label>
+              <input type="text" name="registration plate" placeholder="number plate" required="">
+
+
+              <input type="submit" id="submit" value="Add" />
+
+            </form>
+          </div>
+
+          <!-- User can add a payment method-->
+          <p class="usersettings" onclick="document.getElementById('paymentmethod').style.display = 'block'">Add payment method</p>
+
+          <div id="paymentmethod">
+            <form class="settings">
+
+              <label for="fullname">Name on bank card</label>
+              <input type="text" name="fullname" placeholder="name" required="">
+
+              <label for="cardnumber">Card number</label>
+              <input type="number" name="cardnumber" placeholder="card number" required="">
+
+              <label for="expiry">Expiry date</label>
+              <input type="month" name="expiry" placeholder="expiry date" min="2022-04" required="">
+
+              <label for="cvv">CVV number</label>
+              <input type="number" name="cvv" placeholder="cvv" min="2022-04" required="">
+              <input type="submit" id="submit" value="Add" />
+
+          </form>
+          </div>
+
+        <!--</header>-->
+
+
+
+        <!-- Footer -->
+        <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+            <p>Created by Group 33 </p>
+        </footer>
 
 </body>
 
