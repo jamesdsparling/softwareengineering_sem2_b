@@ -2,6 +2,7 @@
 drop table profile;
 drop table parking_space;
 drop table ticket;
+drop table chat_log;
 
 -- Table definitions --
 create table profile (
@@ -28,4 +29,12 @@ create table ticket (
 	end_time timestamp not null,
 	is_accepted bool not null,
 	requested_time timestamp not null
+);
+
+create table chat_log (
+	customer_id int references profile(profile_id),
+	time_sent timestamp,
+	chat_message varchar(300) not null,
+	from_admin bool not null,
+	primary key (customer_id, time_sent)
 );
