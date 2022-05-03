@@ -39,9 +39,73 @@
             <a href="/messages" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Messages</a>
         </div>
 
-        <!-- Header -->
+        <!-- Header
         <header class="w3-container w3-blue w3-center" style="padding:384px 16px">
-        </header>
+        </header>-->
+        <input type='button' value='Load tickets' id='fetchall'>
+
+        <!-- Table -->
+        <table border='1' id='ticketTable' style='border-collapse: collapse;'>
+            <thead>
+                <tr>
+                    <th>Start time</th>
+                    <th>End time</th>
+                    <th>Accept</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+
+                // Fetch all records
+                $('#fetchall').click(function() {
+                    // AJAX GET request
+                    $.ajax({
+                        type: 'post',
+                        url: '/api/me/tickets',
+                        dataType: 'json',
+                        data: {
+                            requestType: 'fetchall'
+                        },
+                        success: function(response) {
+                            console.log(response)
+                            createRows(response);
+                        }
+                    });
+                });
+            });
+
+            // Create table rows
+            function createRows(response) {
+                var len = 0;
+                $('#userTable tbody').empty(); // Empty <tbody>
+                if (response != null) {
+                    len = response.length;
+                }
+                if (len > 0) {
+                    for (var i = 0; i < len; i++) {
+                        var start_time = response[i].start_time;
+                        var end_time = response[i].end_time;
+
+                        var tr_str = "<tr>" +
+                            "<td align='center'>" + start_time + "</td>" +
+                            "<td align='center'>" + end_time + "</td>" +
+                            "<td align='center'><button name='yes"+id+"' id='yes"+id+"'>Yes</button><button name='no"+id+"' id='no"+id+"'>No</button></td>" +
+                            +"</tr>";
+
+                        $("#userTable tbody").append(tr_str);
+                    }
+                } else {
+                    var tr_str = "<tr>" +
+                        "<td align='center' colspan='4'>No record found.</td>" +
+                        "</tr>";
+
+                    $("#userTable tbody").append(tr_str);
+                }
+            }
+        </script>
 
         <!-- Footer -->
         <footer class="w3-container w3-padding-64 w3-center w3-opacity">
