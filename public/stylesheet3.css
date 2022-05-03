@@ -544,3 +544,8 @@ div {
 	border-radius: 1px;
 	border: 1px solid black;
 }
+
+#ticketTable{
+  margin-left: auto;
+  margin-right: auto;
+}
