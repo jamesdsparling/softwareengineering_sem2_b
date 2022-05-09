@@ -18,7 +18,7 @@
         h6 {
             font-family: "Lato", sans-serif
         }
-
+        
         .w3-bar,
         h1,
         button {
@@ -91,26 +91,15 @@
                         var id = response[i].ticket_id
                         var is_accepted = response[i].is_accepted;
 
-                if(is_accepted == 1){
-                  var tr_str = "<tr class='accepted'>" +
-                        var tr_str = "<tr>" +
-                        "<td align='center'>" + start_time + "</td>" +
-                        "<td align='center'>" + end_time + "</td>" +
-                        "<td align='center'><button name='yes" + id + "' id='yes" + id + "' onclick='updateStatus(true, " + id + ")'>Yes</button><button name='no" + id + "' id='no" + id + "' onclick='updateStatus(false, " + id + ")'>No</button></td>" +
-                        +"</tr>";
+                        var tr_str = "<tr class='" + is_accepted == true ? "accepted" : "not_accepted" + "'>" +
+                            // var tr_str = "<tr>" +
+                            "<td align='center'>" + start_time + "</td>" +
+                            "<td align='center'>" + end_time + "</td>" +
+                            "<td align='center'><button name='yes" + id + "' id='yes" + id + "' onclick='updateStatus(true, " + id + ")'>Yes</button><button name='no" + id + "' id='no" + id + "' onclick='updateStatus(false, " + id + ")'>No</button></td>" +
+                            +"</tr>";
 
                         $("#ticketTable tbody").append(tr_str);
                     }
-                  else{
-                    var tr_str = "<tr class='not_accepted'>" +
-                    var tr_str = "<tr>" +
-                    "<td align='center'>" + start_time + "</td>" +
-                    "<td align='center'>" + end_time + "</td>" +
-                    "<td align='center'><button name='yes" + id + "' id='yes" + id + "' onclick='updateStatus(true, " + id + ")'>Yes</button><button name='no" + id + "' id='no" + id + "' onclick='updateStatus(false, " + id + ")'>No</button></td>" +
-                    +"</tr>";
-
-                      $("#ticketTable tbody").append(tr_str);
-                        }
                 } else {
                     var tr_str = "<tr>" +
                         "<td align='center' colspan='4'>No record found.</td>" +
