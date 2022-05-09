@@ -516,25 +516,25 @@ div {
   margin: auto;
 }
 
-.settings, .update, .sendMessage, .updateTicket, .addBalance{
+.update, .sendMessage, .updateTicket, .addBalance{
   display: block;
   margin-top: 0em;
-	transform: none;
-	position: static;
-	background-color: transparent;
-	box-shadow: none;
-	padding: 0px;
+  transform: none;
+  position: static;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0px;
 }
-.settings, .update, .sendMessage, .updateTicket, .addBalance  *{
-	color: black;
+.update, .sendMessage, .updateTicket, .addBalance  *{
+  color: black;
 	outline: black;
 	border: medium none color;
 }
-.settings, .update, .sendMessage, .updateTicket, .addBalance label{
+.update, .sendMessage, .updateTicket, .addBalance label{
 	margin-top: 0;
 }
-.settings, .update, .sendMessage, .updateTicket, .addBalance input {
-	height: auto;
+.update, .sendMessage, .updateTicket, .addBalance input {
+  height: auto;
 	width: 100%;
 	background-color: transparent;
 	padding: 12px 20px;
@@ -578,4 +578,33 @@ th {
 
 #paymentMethod{
   display: none;
+}
+
+.settings{
+  display: block;
+  margin-top: 0em;
+	transform: none;
+	position: static;
+	background-color: transparent;
+	box-shadow: none;
+	padding: 0px;
+}
+.settings *{
+	color: black;
+	outline: black;
+	border: medium none color;
+}
+.settings label{
+	margin-top: 0;
+}
+.settings input {
+	height: auto;
+	width: 100%;
+	background-color: transparent;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	margin-top: 0px;
+	border-radius: 1px;
+	border: 1px solid black;
 }
