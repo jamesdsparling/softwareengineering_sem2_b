@@ -10,11 +10,11 @@ insert into profiles(email, pass, balance, registration_plate) values('UlyssesSG
 insert into profiles(email, pass, balance, registration_plate) values('RosaParks@montgomery.al', '1Dec1955', 2005, 'MG92 PWQ');
 insert into profiles(email, pass, balance, registration_plate) values('Hypatia@alexandira.edu', 'Astrolabe', 415, null);
 
-insert into parking_spaces values(0, 0.0, 0.0, true, 'Charging point');
-insert into parking_spaces values(1, 1.0, 0.0, false, '');
-insert into parking_spaces values(2, 1.0, 1.0, false, '');
-insert into parking_spaces values(3, 2.0, 1.0, false, '');
-insert into parking_spaces values(4, 2.0, 2.0, false, 'At entrance');
+insert into parking_spaces values(0, 0.0, 0.0, false, true, 'Charging point');
+insert into parking_spaces values(1, 1.0, 0.0, false, false, '');
+insert into parking_spaces values(2, 1.0, 1.0, false, false, '');
+insert into parking_spaces values(3, 2.0, 1.0, false, false, '');
+insert into parking_spaces values(4, 2.0, 2.0, false, false, 'At entrance');
 
 insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(1, 1, '2022-03-16 20:00:00', 2, true);
 insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(1, 1, '2022-03-16 15:00:00', 24, false);
@@ -35,3 +35,4 @@ select * from profiles;
 select * from parking_spaces;
 select * from tickets;
 select * from messages;
+

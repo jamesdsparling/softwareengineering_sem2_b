@@ -18,6 +18,7 @@ create table parking_spaces (
 	space_id int primary key,
 	gps_x float not null,
 	gps_y float not null,
+	is_auto_accept bool not null,
 	is_charge bool not null,
 	region text
 );
