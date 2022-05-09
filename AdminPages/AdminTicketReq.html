@@ -18,7 +18,7 @@
         h6 {
             font-family: "Lato", sans-serif
         }
-
+        
         .w3-bar,
         h1,
         button {
@@ -80,7 +80,7 @@
             // Create table rows
             function createRows(response) {
                 var len = 0;
-                $('#userTable tbody').empty(); // Empty <tbody>
+                $('#ticketTable tbody').empty(); // Empty <tbody>
                 if (response != null) {
                     len = response.length;
                 }
@@ -88,22 +88,34 @@
                     for (var i = 0; i < len; i++) {
                         var start_time = response[i].start_time;
                         var end_time = response[i].end_time;
+                        var id = response[i].ticket_id;
 
                         var tr_str = "<tr>" +
                             "<td align='center'>" + start_time + "</td>" +
                             "<td align='center'>" + end_time + "</td>" +
-                            "<td align='center'><button name='yes"+id+"' id='yes"+id+"'>Yes</button><button name='no"+id+"' id='no"+id+"'>No</button></td>" +
+                            "<td align='center'><button name='yes" + id + "' id='yes" + id + "' onclick='updateStatus(true, " + id + ")'>Yes</button><button name='no" + id + "' id='no" + id + "' onclick='updateStatus(false, " + id + ")'>No</button></td>" +
                             +"</tr>";
 
-                        $("#userTable tbody").append(tr_str);
+                        $("#ticketTable tbody").append(tr_str);
                     }
                 } else {
                     var tr_str = "<tr>" +
                         "<td align='center' colspan='4'>No record found.</td>" +
                         "</tr>";
 
-                    $("#userTable tbody").append(tr_str);
+                    $("#ticketTable tbody").append(tr_str);
                 }
+            }
+
+            function updateStatus(value, id) {
+                $.post("/api/admin/updateTicketStatus", {
+                        ticket_id: id,
+                        is_accepted: value
+                    },
+                    function(data, status) {
+                        console.log(data)
+                        console.log(status)
+                    })
             }
         </script>
 
