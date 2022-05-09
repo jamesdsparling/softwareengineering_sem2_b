@@ -517,7 +517,7 @@ div {
 }
 
 
-.settings, .update{
+.settings, .update, .sendMessage{
   display: block;
   margin-top: 0em;
 	transform: none;
@@ -526,15 +526,15 @@ div {
 	box-shadow: none;
 	padding: 0px;
 }
-.settings, .update *{
+.settings, .update, .sendMessage *{
 	color: black;
 	outline: black;
 	border: medium none color;
 }
-.settings, .update label{
+.settings, .update, .sendMessage label{
 	margin-top: 0;
 }
-.settings, .update input {
+.settings, .update, .sendMessage input {
 	height: auto;
 	width: 100%;
 	background-color: transparent;
@@ -554,7 +554,21 @@ div {
 	padding: 10px;
 }
 
-#ticketTable{
-  margin-left: auto;
-  margin-right: auto;
+.messages{
+	padding: 5px;
+}
+table{
+	border-collapse: collapse;
+	border: 1px solid;
+	margin-left: auto;
+	margin-right: auto;
+}
+th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  background-color: #607d8b;
+}
+
+.sendMessage{
+	width: 100%;
 }
