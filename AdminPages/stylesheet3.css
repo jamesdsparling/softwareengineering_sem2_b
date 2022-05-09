@@ -475,3 +475,69 @@ button {
 div {
     display: block;
 }
+
+.usersettings, .updateTitle{
+  font-size: 16px;
+  padding: 10px;
+  background-color: #607d8b;
+  color: white;
+  border: solid 1px;
+  margin: auto;
+}
+
+
+.settings, .update, .sendMessage{
+  display: block;
+  margin-top: 0em;
+	transform: none;
+	position: static;
+	background-color: transparent;
+	box-shadow: none;
+	padding: 0px;
+}
+.settings, .update, .sendMessage *{
+	color: black;
+	outline: black;
+	border: medium none color;
+}
+.settings, .update, .sendMessage label{
+	margin-top: 0;
+}
+.settings, .update, .sendMessage input {
+	height: auto;
+	width: 100%;
+	background-color: transparent;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	margin-top: 0px;
+	border-radius: 1px;
+	border: 1px solid black;
+}
+
+.update input {
+	height: 20px
+}
+
+.update{
+	padding: 10px;
+}
+
+.messages{
+	padding: 5px;
+}
+table{
+	border-collapse: collapse;
+	border: 1px solid;
+	margin-left: auto;
+	margin-right: auto;
+}
+th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  background-color: #607d8b;
+}
+
+.sendMessage{
+	width: 100%;
+}
