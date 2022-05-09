@@ -1,15 +1,15 @@
 -- Delete tables (to make changes) --
-drop table if exists profiles;
-drop table if exists parking_spaces;
-drop table if exists tickets;
-drop table if exists messages;
+drop table if exists profiles cascade;
+drop table if exists parking_spaces cascade;
+drop table if exists tickets cascade;
+drop table if exists messages cascade;
 
 -- Table definitions --
 create table profiles (
 	profile_id SERIAL primary key,
 	email varchar(100) not null unique,
 	pass varchar(50) not null default 0,
-	balance int default 0,
+	balance int default 0 CHECK (balance >= 0),
 	registration_plate varchar(16),
     cardnum varchar(16)
 );
@@ -26,10 +26,9 @@ create table tickets (
 	ticket_id SERIAL primary key,
 	profile_id int not null references profiles(profile_id),
 	space_id int not null references parking_spaces(space_id),
-	start_time timestamp not null,
-	end_time timestamp not null,
-	is_accepted bool not null default false,
-	requested_time timestamp not null
+	requested_time timestamp not null,
+    stay_hours int not null CHECK (stay_hours >= 0),
+	is_accepted bool not null default false
 );
 
 create table messages (

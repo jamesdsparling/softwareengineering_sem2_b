@@ -16,11 +16,11 @@ insert into parking_spaces values(2, 1.0, 1.0, false, '');
 insert into parking_spaces values(3, 2.0, 1.0, false, '');
 insert into parking_spaces values(4, 2.0, 2.0, false, 'At entrance');
 
-insert into tickets(profile_id, space_id, start_time, end_time, is_accepted, requested_time) values(1, 1, '2022-03-16 20:00:00', '2022-03-16 22:00:00', true, '2022-02-16 13:30:00');
-insert into tickets(profile_id, space_id, start_time, end_time, is_accepted, requested_time) values(1, 1, '2022-03-16 15:00:00', '2022-03-16 16:00:00', false, '2022-02-16 13:35:00');
-insert into tickets(profile_id, space_id, start_time, end_time, is_accepted, requested_time) values(2, 2, '2022-03-16 17:00:00', '2022-03-16 19:00:00', false, '2022-02-16 13:37:00');
-insert into tickets(profile_id, space_id, start_time, end_time, is_accepted, requested_time) values(4, 3, '2022-03-16 09:30:00', '2022-03-16 17:30:00', false, '2022-02-16 13:40:00');
-insert into tickets(profile_id, space_id, start_time, end_time, is_accepted, requested_time) values(4, 3, '2022-04-16 09:00:00', '2022-03-16 17:15:00', false, '2022-02-16 13:41:00');
+insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(1, 1, '2022-03-16 20:00:00', 2, true);
+insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(1, 1, '2022-03-16 15:00:00', 24, false);
+insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(2, 2, '2022-03-16 17:00:00', 4, false);
+insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(4, 3, '2022-03-16 09:30:00', 48, false);
+insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(4, 3, '2022-04-16 09:00:00', 240, false);
 
 insert into messages(profile_id, time_sent, chat_message, from_admin) values(1, '2022-02-16 13:40:00', 'Can the parking space fit my chariot?', false);
 insert into messages(profile_id, time_sent, chat_message, from_admin) values(1, '2022-02-16 13:43:00', 'Yes, I am not sure about the horses though', true);

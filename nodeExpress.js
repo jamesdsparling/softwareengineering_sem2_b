@@ -44,6 +44,45 @@ function presentWithAccess(client, public, user, admin) {
     });
 }
 
+function calculatePrice(hours) {
+    switch (hours) {
+        case 2:
+            return 300;
+        case 3:
+            return 350;
+        case 4:
+            return 450;
+        case 5:
+            return 550;
+        case 6:
+            return 650;
+        case 7:
+            return 750;
+        case 24:
+            return 1500;
+        case 48:
+            return 2500;
+        case 72:
+            return 3500;
+        case 96:
+            return 4500;
+        case 120:
+            return 5500;
+        case 144:
+            return 6500;
+        case 168:
+            return 7500;
+        case 192:
+            return 8500;
+        case 216:
+            return 9500;
+        case 240:
+            return 10000;
+        default:
+            return 0;
+    }
+}
+
 // Parse urlencoded payloads
 app.use(
     express.urlencoded({
@@ -210,24 +249,36 @@ app.post("/api/auth/signup", function(req, res) {
 });
 
 app.post("/api/createTicket", function(req, res) {
-    // Check if balance is enough
-    if ((req.body.start_time, req.body.length, req.body.space_id)) {
-        // Maybe subtract in same query??o
-        let end_time = start_time + length;
-        console.log(length);
-        client.query(
-            "INSERT INTO tickets(start_time, end_time, space_id) VALUES ($1, $2, $3) RETURNING *", [req.body.start_time, end_time, req.body.space_id],
-            (err, dbRes) => {
+    if ((req.session.profile_id, req.body.appt, req.body.hours, req.body.space_id)) {
+        let price = calculatePrice(parseInt(req.body.hours))
+            // client.query("SELECT balance FROM profile WHERE profile_id = $1", [req.session.profile_id], (err, dbRes) => {
+            //         if (err) {
+            //             console.log(err.stack);
+            //         } else {
+            //             if (dbRes.rows[0].balance >= price) {
+        client.query("UPDATE profiles SET balance = balance - $1 WHERE profile_id = $2", [price, req.session.profile_id], (err, dbRes) => {
                 if (err) {
-                    console.log(err.stack);
+                    if (err.constraint = "profiles_balance_check") {
+                        console.log("Fatal error: user too broke")
+                    } else {
+                        console.log(err.stack);
+                    }
                 } else {
-                    // Subtract from balance
-                    console.log("New ticket created");
-                    console.log(dbRes.rows[0]);
-                    res.redirect("/dashboard");
+                    client.query("INSERT INTO tickets(profile_id, space_id, requested_time, stay_hours) VALUES ($1, $2, $3, $4) RETURNING *", [req.session.profile_id, req.body.space_id, req.body.appt, req.body.hours], (err, dbRes) => {
+                        if (err) {
+                            console.log(err.stack)
+                        } else {
+                            console.log("New ticket booked")
+                            console.log(dbRes.rows)
+                        }
+                    })
                 }
-            }
-        );
+            })
+            //         } else {
+            //             console.log("Fatal error: user too broke");
+            //         }
+            //     }
+            // })
     }
 });
 
