@@ -507,7 +507,7 @@ div {
 	display:none
 }
 
-.usersettings{
+.usersettings, .updateTitle{
   font-size: 16px;
   padding: 10px;
   background-color: #607d8b;
@@ -516,7 +516,8 @@ div {
   margin: auto;
 }
 
-.settings{
+
+.settings, .update{
   display: block;
   margin-top: 0em;
 	transform: none;
@@ -525,15 +526,15 @@ div {
 	box-shadow: none;
 	padding: 0px;
 }
-.settings *{
+.settings, .update *{
 	color: black;
 	outline: black;
 	border: medium none color;
 }
-.settings label{
+.settings, .update label{
 	margin-top: 0;
 }
-.settings input {
+.settings, .update input {
 	height: auto;
 	width: 100%;
 	background-color: transparent;
@@ -543,6 +544,14 @@ div {
 	margin-top: 0px;
 	border-radius: 1px;
 	border: 1px solid black;
+}
+
+.update input {
+	height: 20px
+}
+
+.update{
+	padding: 10px;
 }
 
 #ticketTable{

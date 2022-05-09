@@ -43,23 +43,27 @@
         <header class="w3-container w3-blue w3-center" style="padding:384px 16px">
         </header>-->
 
+        <!--Find user who's details admin wants to change-->
         <div id="selectUser">
-          <form class="update">
-            <h2>Update user details</h2>
+          <form class="update" id="selectUser">
 
-            <h3>Select which user's details to update</h3>
-            <label for="firstname">User's first name</label>
-            <input type="text" name="firstname" placeholder="First Name">
+            <h3 class="updateTitle">Search for user</h3>
 
-            <label for="lastname">User's Last Name</label>
-            <input type="text" name="lastname" placeholder="Last Name">
-            <input type="submit" id="submit" value="Check user exists" />
+            <label for="userID">User ID</label>
+            <input type="text" name="userID" placeholder="User's ID">
+
+            <label for="email">User's email</label>
+            <input type="text" name="email" placeholder="email">
+
+            <input type="submit" id="submit" value="Search for user" />
           </form>
         </div>
 
+        <!--Form to change that user's details-->
         <div id="changeDetails">
           <form class=update>
-            <h3>Change details</h3>
+
+            <h3 class="updateTitle">Change details</h3>
 
             <label for="firstname">Change First Name</label>
             <input type="text" name="firstname" placeholder="First Name">
@@ -77,8 +81,10 @@
             <input type="password" name="password" placeholder="Password">
 
             <input type="submit" id="submit" value="Change details" />
+
           </form>
         </div>
+
         <!-- Footer -->
         <footer class="w3-container w3-padding-64 w3-center w3-opacity">
             <p>Created by Group 33 </p>
