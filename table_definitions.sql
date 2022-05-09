@@ -17,6 +17,8 @@ create table profile (
 
 create table parking_space (
 	space_id varchar(16) primary key,
+	gps_x float not null,
+	gps_y float not null,
 	is_charge bool not null,
 	region text
 );
