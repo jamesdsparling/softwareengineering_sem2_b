@@ -197,7 +197,7 @@ app.post("/api/me/updatePlate", function(req, res) {
     }
 })
 
-app.post("/api/admin/updateTicket", function(req, res) {
+app.post("/api/admin/updateTicketStatus", function(req, res) {
     if (req.body.ticket_id, req.body.status) {
         client.query("UPDATE tickets SET status = $1 WHERE ticket_id = $2 RETURNING *", [req.body.status, req.body.ticket_id], (err, dbRes) => {
             if (err) {
@@ -270,7 +270,7 @@ app.post("/api/admin/updateProfile", function(req, res) {
     }
 })
 
-app.post("/api/getSpaces")
+// app.post("/api/getSpaces")
 
 function updateProfile(profile_id, field, value) {
     client.query("UPDATE profile SET $1 = $2 WHERE profile_id = $2 RETURNING *", [field, value, profile_id], (err, dbRes) => {
