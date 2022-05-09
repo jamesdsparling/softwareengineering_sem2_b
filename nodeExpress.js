@@ -127,7 +127,7 @@ app.post("/api/auth/signin", function(req, res) {
     if (req.body.email && req.body.password) {
         // Query id and password for user with given email
         client.query(
-            "SELECT profile_id, pass FROM profile WHERE email = $1", [req.body.email],
+            "SELECT profile_id, pass FROM profiles WHERE email = $1", [req.body.email],
             (err, dbRes) => {
                 if (err) {
                     // Branch most likely reached if database is offline or connection interrupted
@@ -180,11 +180,11 @@ app.post("/api/auth/signup", function(req, res) {
     // firstname / lastname / phonenumber also available in req.body
     if (req.body.email && req.body.password) {
         client.query(
-            "INSERT INTO profile(email, pass) VALUES ($1, $2) RETURNING *", [req.body.email, req.body.password],
+            "INSERT INTO profiles(email, pass) VALUES ($1, $2) RETURNING *", [req.body.email, req.body.password],
             (err, dbRes) => {
                 if (err) {
                     // Most common error. User already exists.
-                    if (err.constraint == "profile_email_key") {
+                    if (err.constraint == "profiles_email_key") {
                         // Just redirects for now, will be fixed alongside sign in incorrect password resubmission
                         res.send("User with email " + req.body.email + " already exists.");
                     } else {
@@ -234,7 +234,7 @@ app.post("/api/createTicket", function(req, res) {
 app.post("/api/me/updatePlate", function(req, res) {
     if (req.body.registration_plate) {
         client.query(
-            "UPDATE profile SET registration_plate = $1 WHERE profile_id = $2 RETURNING *", [req.body.registration_plate, req.session.profile_id],
+            "UPDATE profiles SET registration_plate = $1 WHERE profile_id = $2 RETURNING *", [req.body.registration_plate, req.session.profile_id],
             (err, dbRes) => {
                 if (err) {
                     console.log(err.stack);
@@ -251,9 +251,10 @@ app.post("/api/me/updatePlate", function(req, res) {
 app.post("/api/admin/updateTicketStatus", function(req, res) {
     if (req.session.admin) {
         if ((req.body.ticket_id, req.body.is_accepted)) {
-            if (req.body.is_accepted == true) {
+            console.log(req.body.is_accepted)
+            if (req.body.is_accepted == "true") {
                 client.query(
-                    "UPDATE ticket SET is_accepted = true WHERE ticket_id = $1 RETURNING *", [req.body.ticket_id],
+                    "UPDATE tickets SET is_accepted = true WHERE ticket_id = $1 RETURNING *", [req.body.ticket_id],
                     (err, dbRes) => {
                         if (err) {
                             console.log(err.stack);
@@ -266,12 +267,12 @@ app.post("/api/admin/updateTicketStatus", function(req, res) {
                 );
             } else {
                 client.query(
-                    "DELETE FROM ticket WHERE ticket_id = $1 RETURNING *", [req.body.ticket_id],
+                    "DELETE FROM tickets WHERE ticket_id = $1 RETURNING *", [req.body.ticket_id],
                     (err, dbRes) => {
                         if (err) {
                             console.log(err.stack);
                         } else {
-                            console.log("Ticket status updated");
+                            console.log("ticket status updated");
                             console.log(dbRes.rows[0]);
                             res.redirect("/dashboard");
                         }
@@ -284,7 +285,7 @@ app.post("/api/admin/updateTicketStatus", function(req, res) {
 
 app.post("/api/me/tickets", function(req, res) {
     client.query(
-        "SELECT ticket_id, start_time, end_time FROM ticket WHERE ticket.profile_id = $1", [req.session.profile_id],
+        "SELECT ticket_id, start_time, end_time FROM tickets WHERE tickets.profile_id = $1", [req.session.profile_id],
         (err, dbRes) => {
             if (err) {
                 console.log(err.stack);
@@ -298,7 +299,7 @@ app.post("/api/me/tickets", function(req, res) {
 app.post("/api/admin/tickets", function(req, res) {
     if (req.session.admin) {
         client.query(
-            "SELECT ticket_id, start_time, end_time, is_accepted FROM ticket",
+            "SELECT ticket_id, start_time, end_time, is_accepted FROM tickets",
             (err, dbRes) => {
                 if (err) {
                     console.log(err.stack);
@@ -310,54 +311,54 @@ app.post("/api/admin/tickets", function(req, res) {
     }
 });
 
-app.post("/api/me/messages", function(req, res) {
-    client.query(
-        "SELECT * FROM messages WHERE from_profile = $1 OR to_profile = $1", [req.session.profile_id],
-        (err, dbRes) => {
-            if (err) {
-                console.log(err.stack);
-            } else {
-                res.send(dbRes.rows);
-            }
-        }
-    );
-});
+// app.post("/api/me/messages", function(req, res) {
+//     client.query(
+//         "SELECT * FROM messages WHERE from_profile = $1 OR to_profile = $1", [req.session.profile_id],
+//         (err, dbRes) => {
+//             if (err) {
+//                 console.log(err.stack);
+//             } else {
+//                 res.send(dbRes.rows);
+//             }
+//         }
+//     );
+// });
 
-app.post("/api/sendMessage", function(req, res) {
-    if (req.body.message) {
-        client.query(
-            "INSERT INTO messages(message, from_profile, to_profile) VALUES ($1, $2, $3) RETURNING *", [req.body.message, req.session.profile_id, 1],
-            (err, dbRes) => {
-                if (err) {
-                    console.log(err.stack);
-                } else {
-                    console.log("Sent message");
-                    console.log(dbRes.rows[0]);
-                    res.redirect("/dashboard");
-                }
-            }
-        );
-    }
-});
+// app.post("/api/sendMessage", function(req, res) {
+//     if (req.body.message) {
+//         client.query(
+//             "INSERT INTO messages(message, from_profiles, to_profiles) VALUES ($1, $2, $3) RETURNING *", [req.body.message, req.session.profile_id, 1],
+//             (err, dbRes) => {
+//                 if (err) {
+//                     console.log(err.stack);
+//                 } else {
+//                     console.log("Sent message");
+//                     console.log(dbRes.rows[0]);
+//                     res.redirect("/dashboard");
+//                 }
+//             }
+//         );
+//     }
+// });
 
-app.post("/api/admin/sendMessage", function(req, res) {
-    if (req.session.admin) {
-        if ((req.body.message, to_profile)) {
-            client.query(
-                "INSERT INTO messages(message, from_profile, to_profile) VALUES ($1, $2, $3) RETURNING *", [req.body.message, 1, req.body.to_profile],
-                (err, dbRes) => {
-                    if (err) {
-                        console.log(err.stack);
-                    } else {
-                        console.log("Sent message");
-                        console.log(dbRes.rows[0]);
-                        res.redirect("/dashboard");
-                    }
-                }
-            );
-        }
-    }
-});
+// app.post("/api/admin/sendMessage", function(req, res) {
+//     if (req.session.admin) {
+//         if ((req.body.message, to_profile)) {
+//             client.query(
+//                 "INSERT INTO messages(message, from_profile, to_profiles) VALUES ($1, $2, $3) RETURNING *", [req.body.message, 1, req.body.to_profiles],
+//                 (err, dbRes) => {
+//                     if (err) {
+//                         console.log(err.stack);
+//                     } else {
+//                         console.log("Sent message");
+//                         console.log(dbRes.rows[0]);
+//                         res.redirect("/dashboard");
+//                     }
+//                 }
+//             );
+//         }
+//     }
+// });
 
 app.post("/api/admin/updateProfile", function(req, res) {
     if (req.session.admin) {
@@ -376,7 +377,7 @@ app.post("/api/admin/updateProfile", function(req, res) {
 
 function updateProfile(profile_id, field, value) {
     client.query(
-        "UPDATE profile SET $1 = $2 WHERE profile_id = $2 RETURNING *", [field, value, profile_id],
+        "UPDATE profiles SET $1 = $2 WHERE profile_id = $2 RETURNING *", [field, value, profile_id],
         (err, dbRes) => {
             if (err) {
                 console.log(err.stack);

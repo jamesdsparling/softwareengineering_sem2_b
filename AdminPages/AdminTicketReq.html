@@ -64,7 +64,7 @@
                     // AJAX GET request
                     $.ajax({
                         type: 'post',
-                        url: '/api/me/tickets',
+                        url: '/api/admin/tickets',
                         dataType: 'json',
                         data: {
                             requestType: 'fetchall'
@@ -91,7 +91,7 @@
                         var id = response[i].ticket_id
                         var is_accepted = response[i].is_accepted;
 
-                        var tr_str = "<tr class='" + is_accepted == true ? "accepted" : "not_accepted" + "'>" +
+                        var tr_str = "<tr class='" + ((is_accepted == true) ? "accepted" : "not_accepted") + "'>" +
                             // var tr_str = "<tr>" +
                             "<td align='center'>" + start_time + "</td>" +
                             "<td align='center'>" + end_time + "</td>" +
@@ -110,6 +110,7 @@
             }
 
             function updateStatus(value, id) {
+                console.log(value)
                 $.post("/api/admin/updateTicketStatus", {
                         ticket_id: id,
                         is_accepted: value
