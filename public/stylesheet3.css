@@ -516,8 +516,7 @@ div {
   margin: auto;
 }
 
-
-.settings, .update, .sendMessage{
+.settings, .update, .sendMessage, .updateTicket, .addBalance{
   display: block;
   margin-top: 0em;
 	transform: none;
@@ -526,15 +525,15 @@ div {
 	box-shadow: none;
 	padding: 0px;
 }
-.settings, .update, .sendMessage *{
+.settings, .update, .sendMessage, .updateTicket, .addBalance  *{
 	color: black;
 	outline: black;
 	border: medium none color;
 }
-.settings, .update, .sendMessage label{
+.settings, .update, .sendMessage, .updateTicket, .addBalance label{
 	margin-top: 0;
 }
-.settings, .update, .sendMessage input {
+.settings, .update, .sendMessage, .updateTicket, .addBalance input {
 	height: auto;
 	width: 100%;
 	background-color: transparent;
@@ -575,4 +574,8 @@ th {
 
 .accepted{
   background: #252C2D;
+}
+
+#paymentMethod{
+  display: none;
 }

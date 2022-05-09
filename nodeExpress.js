@@ -348,6 +348,19 @@ app.post("/api/me/tickets", function(req, res) {
     );
 });
 
+app.post("/api/me/profiles", function(req, res) {
+    client.query(
+        "SELECT cardnum FROM profiles WHERE tickets.profile_id = $1", [req.session.profile_id],
+        (err, dbRes) => {
+            if (err) {
+                console.log(err.stack);
+            } else {
+                res.send(dbRes.rows);
+            }
+        }
+    );
+});
+
 app.post("/api/admin/tickets", function(req, res) {
     if (req.session.admin) {
         client.query(
