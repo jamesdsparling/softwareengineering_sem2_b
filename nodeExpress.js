@@ -303,6 +303,7 @@ app.post("/api/admin/tickets", function(req, res) {
                 if (err) {
                     console.log(err.stack);
                 } else {
+                    console.log(dbRes.rows)
                     res.send(dbRes.rows);
                 }
             }
