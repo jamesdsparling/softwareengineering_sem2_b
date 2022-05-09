@@ -572,3 +572,7 @@ th {
 .sendMessage{
 	width: 100%;
 }
+
+.accepted{
+  background: #252C2D;
+}

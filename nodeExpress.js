@@ -298,7 +298,7 @@ app.post("/api/me/tickets", function(req, res) {
 app.post("/api/admin/tickets", function(req, res) {
     if (req.session.admin) {
         client.query(
-            "SELECT ticket_id, start_time, end_time FROM ticket",
+            "SELECT ticket_id, start_time, end_time, is_accepted FROM ticket",
             (err, dbRes) => {
                 if (err) {
                     console.log(err.stack);
