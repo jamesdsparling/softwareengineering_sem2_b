@@ -270,6 +270,7 @@ app.post("/api/createTicket", function(req, res) {
                         } else {
                             console.log("New ticket booked")
                             console.log(dbRes.rows)
+                            res.redirect("/tickets")
                         }
                     })
                 }
