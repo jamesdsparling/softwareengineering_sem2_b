@@ -48,7 +48,7 @@
             <form class="settings" method="POST" action="/api/me/updatePlate">
 
                 <label for="Number plate">Number plate</label>
-                <input type="text" name="registration_plate" placeholder="number plate" required="">
+                <input type="text" minlength="4" maxlength="8" pattern="[a-zA-Z0-9\s]+" name="registration_plate" placeholder="number plate" required="">
 
 
                 <input type="submit" id="submit" value="Add" />
