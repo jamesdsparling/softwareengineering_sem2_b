@@ -22,13 +22,13 @@ insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepte
 insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(4, 3, '2022-03-16 09:30:00', 48, false);
 insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(4, 3, '2022-04-16 09:00:00', 240, false);
 
-insert into messages(profile_id, time_sent, chat_message, from_admin) values(1, '2022-02-16 13:40:00', 'Can the parking space fit my chariot?', false);
-insert into messages(profile_id, time_sent, chat_message, from_admin) values(1, '2022-02-16 13:43:00', 'Yes, I am not sure about the horses though', true);
-insert into messages(profile_id, time_sent, chat_message, from_admin) values(1, '2022-02-16 13:45:00', 'Could I book another space for them?', false);
-insert into messages(profile_id, time_sent, chat_message, from_admin) values(1, '2022-02-16 13:46:00', 'Certainly!', true);
-insert into messages(profile_id, time_sent, chat_message, from_admin) values(2, '2022-02-16 13:55:00', 'Can I have my user e-mail changed?', false);
-insert into messages(profile_id, time_sent, chat_message, from_admin) values(3, '2022-02-16 13:59:00', 'Certainly, what would you like to change it to?', true);
-insert into messages(profile_id, time_sent, chat_message, from_admin) values(3, '2022-02-16 14:05:00', 'potus18@whitehouse.dc', false);
+insert into messages(profile_id, time_sent, chat_message, from_admin) values(2, '2022-02-16 13:40:00', 'Can the parking space fit my chariot?', false);
+insert into messages(profile_id, time_sent, chat_message, from_admin) values(2, '2022-02-16 13:43:00', 'Yes, I am not sure about the horses though', true);
+insert into messages(profile_id, time_sent, chat_message, from_admin) values(2, '2022-02-16 13:45:00', 'Could I book another space for them?', false);
+insert into messages(profile_id, time_sent, chat_message, from_admin) values(2, '2022-02-16 13:46:00', 'Certainly!', true);
+insert into messages(profile_id, time_sent, chat_message, from_admin) values(4, '2022-02-16 13:55:00', 'Can I have my user e-mail changed?', false);
+insert into messages(profile_id, time_sent, chat_message, from_admin) values(4, '2022-02-16 13:59:00', 'Certainly, what would you like to change it to?', true);
+insert into messages(profile_id, time_sent, chat_message, from_admin) values(4, '2022-02-16 14:05:00', 'potus18@whitehouse.dc', false);
 
 -- View tables --
 select * from profiles;
