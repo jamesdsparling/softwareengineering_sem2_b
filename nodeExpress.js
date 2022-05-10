@@ -364,7 +364,7 @@ app.post("/api/me/profiles", function(req, res) {
 app.post("/api/admin/tickets", function(req, res) {
     if (req.session.admin) {
         client.query(
-            "SELECT ticket_id, start_time, end_time, is_accepted FROM tickets",
+            "SELECT ticket_id, requested_time, stay_hours, is_accepted FROM tickets",
             (err, dbRes) => {
                 if (err) {
                     console.log(err.stack);
