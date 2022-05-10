@@ -63,7 +63,7 @@
             <form class="settings" method="POST" action="/api/me/updateCard">
 
                 <label for="fullname">Name on bank card</label>
-                <input type="text" name="fullname" placeholder="name" required="">
+                <input type="text" minlength="2" maxlength="32" name="fullname" placeholder="name" required="">
 
                 <label for="cardnumber">Card number</label>
                 <input type="number" name="cardnumber" placeholder="card number" required="">
