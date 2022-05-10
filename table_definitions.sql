@@ -11,7 +11,9 @@ create table profiles (
 	pass varchar(50) not null default 0,
 	balance int default 0 CHECK (balance >= 0),
 	registration_plate varchar(16),
-    cardnum varchar(16)
+    card_num varchar(16),
+	card_name varchar(32),
+	card_cvv varchar(3)
 );
 
 create table parking_spaces (
