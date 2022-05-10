@@ -51,7 +51,7 @@
               <th>Ticket ID</th>
               <th>Space ID</th>
               <th>Start Time</th>
-              <th>End Time</th>
+              <th>Length of stay</th>
               <th>Change?</th>
               <th>Cancel?</th>
             </tr>
@@ -84,7 +84,7 @@
     // Create table rows
     function createRows(response) {
         var len = 0;
-        $('#userTable tbody').empty(); // Empty <tbody>
+        $('#ticketTable tbody').empty(); // Empty <tbody>
         if (response != null) {
             len = response.length;
         }
@@ -92,25 +92,25 @@
             for (var i = 0; i < len; i++) {
                 var ticket_id = response[i].ticket_id;
                 var space_id = response[i].space_id;
-                var start_time = response[i].start_time;
-                var end_time = response[i].end_time;
+                var requested_time = response[i].requested_time;
+                var stay_hours = response[i].stay_hours;
                 var tr_str = "<tr>" +
                     "<td align='center'>" + ticket_id + "</td>" +
                     "<td align='center'>" + space_id + "</td>" +
-                    "<td align='center'>" + start_time + "</td>" +
-                    "<td align='center'>" + end_time + "</td>" +
+                    "<td align='center'>" + requested_time + "</td>" +
+                    "<td align='center'>" + stay_hours + "</td>" +
                     "<td align='center'><button name='yes"+id+"' id='yes"+id+"'>Yes</button></td>" +
                     "<td align='center'><button name='yes"+id+"' id='yes2"+id+"'>Yes</button></td>" +
                     +"</tr>";
 
-                $("#userTable tbody").append(tr_str);
+                $("#ticketTable tbody").append(tr_str);
             }
         } else {
             var tr_str = "<tr>" +
                 "<td align='center' colspan='4'>No record found.</td>" +
                 "</tr>";
 
-            $("#userTable tbody").append(tr_str);
+            $("#ticketTable tbody").append(tr_str);
         }
     }
 </script>

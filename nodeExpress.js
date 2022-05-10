@@ -337,7 +337,7 @@ app.post("/api/admin/updateTicketStatus", function(req, res) {
 
 app.post("/api/me/tickets", function(req, res) {
     client.query(
-        "SELECT ticket_id, start_time, end_time FROM tickets WHERE tickets.profile_id = $1", [req.session.profile_id],
+        "SELECT ticket_id, space_id, requested_time, stay_hours FROM tickets WHERE tickets.profile_id = $1", [req.session.profile_id],
         (err, dbRes) => {
             if (err) {
                 console.log(err.stack);
