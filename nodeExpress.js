@@ -199,7 +199,9 @@ app.post("/api/auth/signin", function (req, res) {
                         res.redirect("/dashboard");
                     } else {
                         console.log("Incorrect email or password");
-                        res.send("Incorrect email or password");
+                        res.send(
+                            'Incorrect email or password <br> <a href="/signin.html"><- go back</a>'
+                        );
                     }
                 }
             }
@@ -234,7 +236,7 @@ app.post("/api/auth/signup", function (req, res) {
                             res.send(
                                 "User with email " +
                                     req.body.email +
-                                    " already exists."
+                                    ' already exists. <br> <a href="/signup.html"><- go back</a>'
                             );
                         } else {
                             // Other errors printed to console as a stack trace
@@ -245,19 +247,18 @@ app.post("/api/auth/signup", function (req, res) {
                         // Log the new user to the console
                         console.log(dbRes.rows[0]);
 
-                        // Automatically logs in the user. No need to go back to signin.html anymore.
-                        // req.session.loggedin = true;
-                        // req.session.email = req.body.email;
-
-                        // Attempt a dashboard redirect
-                        // If login was unsuccessful this wil re-redirect to signin. (Possibly user has cookies disabled??)
-                        res.redirect("/");
+                        // Temporary solution. User is still created even if continue is not pressed.
+                        res.send(
+                            'By clicking continue you agree to accept our <a href="/privacy.html">privacy permissions</a> <br> <a href="/">Continue...</a>'
+                        );
                     }
                 }
             );
         } else {
             console.log("Passwords do not match!");
-            res.send("Passwords do not match!");
+            res.send(
+                'Passwords do not match! <br> <a href="/signup.html"><- go back</a>'
+            );
         }
     }
 });
