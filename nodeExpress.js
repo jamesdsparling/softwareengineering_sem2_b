@@ -324,6 +324,7 @@ app.post("/api/createTicket", function (req, res) {
                                         console.log(err.stack);
                                     }
                                 } else {
+                                    let booking = dbRes.rows[0];
                                     client.query(
                                         "UPDATE profiles SET balance = balance - $1 WHERE profile_id = $2",
                                         [price, req.session.profile_id],
@@ -334,7 +335,7 @@ app.post("/api/createTicket", function (req, res) {
                                                 console.log(
                                                     "New ticket booked"
                                                 );
-                                                console.log(dbRes.rows);
+                                                console.log(booking);
                                                 res.send("success");
                                             }
                                         }
