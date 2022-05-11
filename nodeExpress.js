@@ -24,8 +24,8 @@ const client = new Client({
 });
 client.connect();
 
-function presentWithAccess(client, public, user, admin) {
-    app.get(client, function (req, res) {
+function presentWithAccess(link, public, user, admin) {
+    app.get(link, function (req, res) {
         //Check if logged in
         if (req.session.loggedin) {
             //Check if admin
@@ -39,7 +39,7 @@ function presentWithAccess(client, public, user, admin) {
         } else {
             // Not logged in (not admin obviously)
             // Could possibly direct to index page but I like this implementation as users can bookmark the dashboard for easy access
-            res.redirect(public);
+            res.redirect("/signin.html");
         }
     });
 }
@@ -209,15 +209,23 @@ app.post("/api/auth/signin", function (req, res) {
     }
 });
 
-app.post("/api/auth/signout", function (req, res) {
+function signOut(req, res) {
     if (req.session.loggedin == true) {
         console.log("Signing out: " + req.session.email);
         // Destroy login session.
         req.session.destroy();
         // See above comment about dashboard redirect.
         // DO NOT CHANGE THIS PLEASE, CHANGE THE GET LISTENER INSTEAD
-        res.redirect("/");
     }
+    res.redirect("/signin.html");
+}
+
+app.post("/api/auth/signout", function (req, res) {
+    signOut(req, res);
+});
+
+app.get("/signout", function (req, res) {
+    signOut(req, res);
 });
 
 app.post("/api/auth/signup", function (req, res) {
