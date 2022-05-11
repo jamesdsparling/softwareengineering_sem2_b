@@ -286,38 +286,67 @@ app.post("/api/createTicket", function (req, res) {
         //             console.log(err.stack);
         //         } else {
         //             if (dbRes.rows[0].balance >= price) {
+
         client.query(
-            "UPDATE profiles SET balance = balance - $1 WHERE profile_id = $2",
-            [price, req.session.profile_id],
+            "SELECT balance FROM profiles WHERE profile_id = $1",
+            [req.session.profile_id],
             (err, dbRes) => {
                 if (err) {
-                    if ((err.constraint = "profiles_balance_check")) {
-                        console.log("Fatal error: user too broke");
-                    } else {
-                        console.log(err.stack);
-                    }
+                    console.log(err.stack);
                 } else {
-                    client.query(
-                        "INSERT INTO tickets(profile_id, space_id, requested_time, stay_hours) VALUES ($1, $2, $3, $4) RETURNING *",
-                        [
-                            req.session.profile_id,
-                            req.body.space_id,
-                            req.body.appt,
-                            req.body.hours,
-                        ],
-                        (err, dbRes) => {
-                            if (err) {
-                                console.log(err.stack);
-                            } else {
-                                console.log("New ticket booked");
-                                console.log(dbRes.rows);
-                                res.send("success");
+                    if (dbRes.rows[0].balance < price) {
+                        console.log("Error: user too broke");
+                        res.send(
+                            "Balance not sufficient. Please add £" +
+                                String((price - dbRes.rows[0].balance) / 100) +
+                                " to your account"
+                        );
+                    } else {
+                        client.query(
+                            "INSERT INTO tickets(profile_id, space_id, requested_time, stay_hours) VALUES ($1, $2, $3, $4) RETURNING *",
+                            [
+                                req.session.profile_id,
+                                req.body.space_id,
+                                req.body.appt,
+                                req.body.hours,
+                            ],
+                            (err, dbRes) => {
+                                if (err) {
+                                    if (
+                                        err.constraint ==
+                                        "tickets_int4range_tsrange_excl"
+                                    ) {
+                                        console.log("Booking conflict");
+                                        res.send(
+                                            "Sorry, this space is already booked in this time"
+                                        );
+                                    } else {
+                                        console.log(err.stack);
+                                    }
+                                } else {
+                                    client.query(
+                                        "UPDATE profiles SET balance = balance - $1 WHERE profile_id = $2",
+                                        [price, req.session.profile_id],
+                                        (err, dbRes) => {
+                                            if (err) {
+                                                console.log(err.stack);
+                                            } else {
+                                                console.log(
+                                                    "New ticket booked"
+                                                );
+                                                console.log(dbRes.rows);
+                                                res.send("success");
+                                            }
+                                        }
+                                    );
+                                }
                             }
-                        }
-                    );
+                        );
+                    }
                 }
             }
         );
+
         //         } else {
         //             console.log("Fatal error: user too broke");
         //         }
