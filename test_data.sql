@@ -17,7 +17,7 @@ insert into parking_spaces values(3, 2.0, 1.0, false, false, '');
 insert into parking_spaces values(4, 2.0, 2.0, false, false, 'At entrance');
 
 insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(1, 1, '2022-03-16 20:00:00', 2, true);
-insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(1, 1, '2022-03-16 15:00:00', 24, false);
+insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(1, 4, '2022-03-16 15:00:00', 24, false);
 insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(2, 2, '2022-03-16 17:00:00', 4, false);
 insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(4, 3, '2022-03-16 09:30:00', 48, false);
 insert into tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) values(4, 3, '2022-04-16 09:00:00', 240, false);

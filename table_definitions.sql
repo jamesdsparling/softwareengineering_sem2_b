@@ -31,7 +31,9 @@ create table tickets (
 	space_id int not null references parking_spaces(space_id),
 	requested_time timestamp not null,
     stay_hours int not null CHECK (stay_hours >= 0),
-	is_accepted bool not null default false
+	is_accepted bool not null default false,
+	end_time timestamp GENERATED ALWAYS AS (requested_time + interval '1h' * stay_hours) STORED,
+	EXCLUDE USING gist (int4range(space_id, space_id, '[]') WITH =, tsrange(requested_time, end_time) WITH &&)
 );
 
 create table messages (
