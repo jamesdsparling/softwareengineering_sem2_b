@@ -356,6 +356,19 @@ app.post("/api/createTicket", function (req, res) {
     }
 });
 
+app.post("/api/getAvailableSpaces", function (req, res) {
+    if ((req.body.appt, req.body.hours)) {
+        /* SQL Query needed:
+
+        SELECT space_id from parking_spaces
+        (^ REMOVE FROM USING:)
+        SELECT space_id from ticets WHERE (ticket date range overlaps with input date range)
+
+        */
+        // client.query("SELECT space_id from parking_spaces WHERE ")
+    }
+});
+
 app.post("/api/me/updatePlate", function (req, res) {
     if (req.session.loggedin == true) {
         if (req.body.registration_plate) {
