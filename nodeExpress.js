@@ -210,12 +210,14 @@ app.post("/api/auth/signin", function (req, res) {
 });
 
 app.post("/api/auth/signout", function (req, res) {
-    console.log("Signing out: " + req.session.email);
-    // Destroy login session.
-    req.session.destroy();
-    // See above comment about dashboard redirect.
-    // DO NOT CHANGE THIS PLEASE, CHANGE THE GET LISTENER INSTEAD
-    res.redirect("/");
+    if (req.session.loggedin == true) {
+        console.log("Signing out: " + req.session.email);
+        // Destroy login session.
+        req.session.destroy();
+        // See above comment about dashboard redirect.
+        // DO NOT CHANGE THIS PLEASE, CHANGE THE GET LISTENER INSTEAD
+        res.redirect("/");
+    }
 });
 
 app.post("/api/auth/signup", function (req, res) {
@@ -317,25 +319,27 @@ app.post("/api/createTicket", function (req, res) {
 });
 
 app.post("/api/me/updatePlate", function (req, res) {
-    if (req.body.registration_plate) {
-        client.query(
-            "UPDATE profiles SET registration_plate = $1 WHERE profile_id = $2 RETURNING *",
-            [req.body.registration_plate, req.session.profile_id],
-            (err, dbRes) => {
-                if (err) {
-                    console.log(err.stack);
-                } else {
-                    console.log("Registration plate updated");
-                    console.log(dbRes.rows[0]);
-                    res.send("success");
+    if (req.session.loggedin == true) {
+        if (req.body.registration_plate) {
+            client.query(
+                "UPDATE profiles SET registration_plate = $1 WHERE profile_id = $2 RETURNING *",
+                [req.body.registration_plate, req.session.profile_id],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err.stack);
+                    } else {
+                        console.log("Registration plate updated");
+                        console.log(dbRes.rows[0]);
+                        res.send("success");
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 });
 
 app.post("/api/admin/updateTicketStatus", function (req, res) {
-    if (req.session.admin) {
+    if (req.session.admin == true) {
         if ((req.body.ticket_id, req.body.is_accepted)) {
             console.log(req.body.is_accepted);
             if (req.body.is_accepted == "true") {
@@ -372,35 +376,39 @@ app.post("/api/admin/updateTicketStatus", function (req, res) {
 });
 
 app.post("/api/me/tickets", function (req, res) {
-    client.query(
-        "SELECT ticket_id, space_id, requested_time, stay_hours FROM tickets WHERE tickets.profile_id = $1",
-        [req.session.profile_id],
-        (err, dbRes) => {
-            if (err) {
-                console.log(err.stack);
-            } else {
-                res.send(dbRes.rows);
+    if (req.session.loggedin == true) {
+        client.query(
+            "SELECT ticket_id, space_id, requested_time, stay_hours FROM tickets WHERE tickets.profile_id = $1",
+            [req.session.profile_id],
+            (err, dbRes) => {
+                if (err) {
+                    console.log(err.stack);
+                } else {
+                    res.send(dbRes.rows);
+                }
             }
-        }
-    );
+        );
+    }
 });
 
 app.post("/api/me/profiles", function (req, res) {
-    client.query(
-        "SELECT cardnum FROM profiles WHERE tickets.profile_id = $1",
-        [req.session.profile_id],
-        (err, dbRes) => {
-            if (err) {
-                console.log(err.stack);
-            } else {
-                res.send(dbRes.rows);
+    if (req.session.loggedin == true) {
+        client.query(
+            "SELECT cardnum FROM profiles WHERE tickets.profile_id = $1",
+            [req.session.profile_id],
+            (err, dbRes) => {
+                if (err) {
+                    console.log(err.stack);
+                } else {
+                    res.send(dbRes.rows);
+                }
             }
-        }
-    );
+        );
+    }
 });
 
 app.post("/api/admin/tickets", function (req, res) {
-    if (req.session.admin) {
+    if (req.session.admin == true) {
         client.query(
             "SELECT ticket_id, requested_time, stay_hours, is_accepted FROM tickets",
             (err, dbRes) => {
@@ -464,7 +472,7 @@ app.post("/api/admin/tickets", function (req, res) {
 // });
 
 app.post("/api/admin/updateProfile", function (req, res) {
-    if (req.session.admin) {
+    if (req.session.admin == true) {
         if (req.body.profile_id) {
             if (req.body.email) {
                 updateProfile("email", req.body.email, req.body.profile_id);
@@ -475,8 +483,6 @@ app.post("/api/admin/updateProfile", function (req, res) {
         }
     }
 });
-
-// app.post("/api/getSpaces")
 
 function updateProfile(profile_id, field, value) {
     client.query(
