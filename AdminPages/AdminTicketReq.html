@@ -48,6 +48,7 @@
         <table border='1' id='ticketTable' style='border-collapse: collapse;'>
             <thead>
                 <tr>
+                    <th>Space ID</th>
                     <th>Start time</th>
                     <th>Length of stay</th>
                     <th>Accept</th>
@@ -90,12 +91,14 @@
                         var stay_hours = response[i].stay_hours;
                         var id = response[i].ticket_id
                         var is_accepted = response[i].is_accepted;
+                        var space_id = response[i].space_id
 
                         var tr_str = "<tr class='" + ((is_accepted == true) ? "accepted" : "not_accepted") + "'>" +
                             // var tr_str = "<tr>" +
+                            "<td align='center'>" + space_id + "</td>" +
                             "<td align='center'>" + requested_time + "</td>" +
                             "<td align='center'>" + stay_hours + "</td>" +
-                            "<td align='center'><button name='yes" + id + "' id='yes" + id + "' onclick='updateStatus(true, " + id + ")'>Yes</button><button name='no" + id + "' id='no" + id + "' onclick='updateStatus(false, " + id + ")'>No</button></td>" +
+                            "<td align='center'><button name='yes" + id + "' id='yes" + id + "' onclick='updateStatus(true, " + id + ")' " + ((is_accepted == true) ? "disabled" : "") + ">Yes</button><button name='no" + id + "' id='no" + id + "' onclick='updateStatus(false, " + id + ")'>No</button></td>" +
                             +"</tr>";
 
                         $("#ticketTable tbody").append(tr_str);
