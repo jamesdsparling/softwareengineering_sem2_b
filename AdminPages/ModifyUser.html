@@ -46,20 +46,35 @@
         <!--Find user who's details admin wants to change-->
         <div id="selectUser">
           <form class="update" id="selectUser">
-
-            <h3 class="updateTitle">Search for user</h3>
+            <h3 class="updateTitle">Change a user's details</h3>
 
             <label for="userID">User ID</label>
             <input type="text" name="userID" placeholder="User's ID">
 
+            <label for="user-attribute">Attribute (dropdown)</label>
+            <select name="user-attribute" id="user-attribute">
+              <option value="email">E-mail</option>
+              <option value="pass">Password</option>
+              <option value="balance">Balance</option>
+              <option value="registration-plate">Number Plate</option>
+              <option value="card-num">Card Number</option>
+              <option value="card-name">Card Name</option>
+              <option value="card-cvv">CVV</option>
+            </select>
+
+            <label for="new-value">Updated information</label>
+            <input type="text" name="new-value" placeholder="Information you'd like to change" required="">
+            
+            <!--
             <label for="email">User's email</label>
             <input type="text" name="email" placeholder="email">
+            -->
 
-            <input type="submit" id="submit" value="Search for user" />
+            <input type="submit" id="submit" value="Update information">
           </form>
         </div>
 
-        <!--Form to change that user's details-->
+        <!--Form to change that user's details
         <div id="changeDetails">
           <form class=update>
 
@@ -84,6 +99,7 @@
 
           </form>
         </div>
+        -->
 
         <!-- Footer -->
         <footer class="w3-container w3-padding-64 w3-center w3-opacity">

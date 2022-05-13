@@ -67,13 +67,13 @@
                 <input type="text" minlength="2" maxlength="32" name="fullname" placeholder="name" required="">
 
                 <label for="cardnumber">Card number</label>
-                <input type="number" name="cardnumber" placeholder="card number" required="">
+                <input type="text" minlength="16" maxlength="16" pattern="[0-9]+" name="cardnumber" placeholder="card number" required="">
 
                 <label for="expiry">Expiry date</label>
-                <input type="month" name="expiry" placeholder="expiry date" min="2022-04" required="">
+                <input type="month" name="expiry" placeholder="expiry date" min="2022-05" required="">
 
                 <label for="cvv">CVV number</label>
-                <input type="number" name="cvv" placeholder="cvv" min="2022-04" required="">
+                <input type="text" name="cvv" minlength="3" maxlength="3" pattern="[0-9]+" placeholder="cvv" required="">
                 <input type="submit" id="submit" value="Add" />
 
             </form>
