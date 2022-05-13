@@ -329,9 +329,9 @@ app.post("/api/createTicket", function (req, res) {
                     if (dbRes.rows[0].balance < price) {
                         console.log("Error: user too broke");
                         res.send(
-                            "Balance not sufficient. Please add £" +
+                            'Balance not sufficient. Please add £' +
                                 String((price - dbRes.rows[0].balance) / 100) +
-                                " to your account"
+                                ' to your account. <br> <a href="/dashboard"><- go back</a>'
                         );
                     } else {
                         client.query(
@@ -384,7 +384,7 @@ app.post("/api/createTicket", function (req, res) {
                                                     "New ticket booked"
                                                 );
                                                 console.log(booking);
-                                                res.send("success");
+                                                res.send('Ticket booked successfully!! <a href="/dashboard"><- go back</a>');
                                             }
                                         }
                                     );
@@ -483,13 +483,29 @@ app.post("/api/me/updatePlate", function (req, res) {
                     } else {
                         console.log("Registration plate updated");
                         console.log(dbRes.rows[0]);
-                        res.send("success");
+                        res.send('Registration plate updated! <br> <a href="/settings"><- go back</a>');
                     }
                 }
             );
         }
     }
 });
+
+app.post("/api/me/updateCard", function (req, res) {
+    if (req.session.loggedin == true) { 
+        if (req.body.cardnumber, req.body.fullname, req.body.cvv) {}
+            client.query("UPDATE profiles SET card_num = $1, card_name = $2, card_cvv = $3 WHERE profile_id = $4 RETURNING *", [req.body.cardnumber, req.body.fullname, req.body.cvv], (err, dbRes) => {
+                if (err) {
+                    console.log(err.stack);
+                } else {
+                    console.log("Card details updated")
+                    console.log(dbRes.rows[0]);
+                    res.send('Card details updated! <br> <a href="/settings"><- go back</a>');
+                }
+            })
+        }
+    }
+})
 
 app.post("/api/admin/updateTicketStatus", function (req, res) {
     if (req.session.admin == true) {
