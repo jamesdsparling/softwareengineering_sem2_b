@@ -41,7 +41,7 @@ function presentWithAccess(link, public, user, admin) {
         //Check if logged in
         if (req.session.loggedin) {
             //Check if admin
-            if (req.session.admin) {
+            if (req.session.admin == true) {
                 // Logged in && admin
                 res.sendFile(path.join(__dirname, admin));
             } else {
@@ -126,49 +126,49 @@ app.get("/", (req, res) => {
 // Handle root address. Page served varies depending
 presentWithAccess(
     "/dashboard",
-    "signin.html",
+    "/signin.html",
     "/UserPages/UserView.html",
     "/AdminPages/AdminViewMain.html"
 );
 presentWithAccess(
     "/tickets",
-    "signin.html",
+    "/signin.html",
     "/UserPages/ManageTicket.html",
     "/AdminPages/AdminTicketReq.html"
 );
 presentWithAccess(
     "/help",
-    "signin.html",
+    "/signin.html",
     "/UserPages/UserGetHelp.html",
     "/AdminPages/AdminViewMain.html"
 );
 presentWithAccess(
     "/addbalance",
-    "signin.html",
+    "/signin.html",
     "/UserPages/AddBalance.html",
     "/AdminPages/AdminViewMain.html"
 );
 presentWithAccess(
     "/settings",
-    "signin.html",
+    "/signin.html",
     "/UserPages/UserSettings.html",
     "/AdminPages/AdminViewMain.html"
 );
 presentWithAccess(
     "/messages",
-    "signin.html",
+    "/signin.html",
     "/UserPages/UserMessages.html",
     "/AdminPages/AdminMessages.html"
 );
 presentWithAccess(
     "/map",
-    "signin.html",
+    "/signin.html",
     "/UserPages/UserView.html",
     "/AdminPages/ManageMap.html"
 );
 presentWithAccess(
     "/modifyuser",
-    "signin.html",
+    "/signin.html",
     "/UserPages/UserView.html",
     "/AdminPages/ModifyUser.html"
 );
@@ -601,16 +601,39 @@ app.post("/api/admin/tickets", (req, res) => {
     }
 });
 
+app.get("/messages/:userProfileID", (req, res) => {
+    if (req.session.admin == true) {
+        res.sendFile(path.join(__dirname, "/UserPages/UserMessages.html"));
+    } else {
+        res.redirect("/signin.html");
+    }
+});
+
 app.post("/api/me/messages", (req, res) => {
     if (req.session.loggedin) {
+        let profile_id = req.session.profile_id;
+        if (req.session.admin == true) {
+            if (req.headers.referer) {
+                console.log(req.headers.referer.split("messages/"));
+                profile_id = req.headers.referer.split("messages/")[1];
+            }
+        }
+        console.log(profile_id);
+
         client.query(
             "SELECT chat_message, from_admin FROM messages WHERE profile_id = $1",
-            [req.session.profile_id],
+            [profile_id],
             (err, dbRes) => {
                 if (err) {
                     console.log(err.stack);
                 } else {
-                    res.send(dbRes.rows);
+                    let messages = dbRes.rows;
+                    messages.map((message) => {
+                        message.from_me =
+                            message.from_admin == req.session.admin;
+                    });
+                    console.log(messages);
+                    res.send(messages);
                 }
             }
         );

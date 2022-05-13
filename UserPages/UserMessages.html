@@ -4,7 +4,7 @@
         <title>Messages</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="stylesheet3.css" />
+        <link rel="stylesheet" href="/stylesheet3.css" />
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Lato"
@@ -125,20 +125,20 @@
                     response.forEach((message) => {
                         //load messages as variables
                         var chat_message = message.chat_message;
-                        var from_admin = message.from_admin;
+                        var from_me = message.from_admin;
 
                         //if message is from admin
-                        if ((from_admin == true)) {
+                        if (message.from_me) {
                             // append to parent container
                             $(".messages").append(
-                                '<div class="left"> <h3>' + chat_message + '</h3> </div> <br>'
+                                '<div class="right"> <h3>' + message.chat_message + '</h3> </div> <br>'
                             );
                         }
                         //if message is one the user has sent
                         else {
                             // append to parent container
                             $(".messages").append(
-                                '<div class="right"> <h3>' + chat_message + '</h3> </div> <br>'
+                                '<div class="left"> <h3>' + message.chat_message + '</h3> </div> <br>'
                             );
                         }
                     })
