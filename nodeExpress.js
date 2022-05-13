@@ -367,7 +367,7 @@ app.post("/api/createTicket", function (req, res) {
                                                 );
                                             }
                                         );
-                                        
+
                                     } else {
                                         console.log(err.stack);
                                     }
@@ -597,18 +597,18 @@ app.post("/api/admin/tickets", function (req, res) {
     }
 });
 
-// app.post("/api/me/messages", function(req, res) {
-//     client.query(
-//         "SELECT * FROM messages WHERE from_profile = $1 OR to_profile = $1", [req.session.profile_id],
-//         (err, dbRes) => {
-//             if (err) {
-//                 console.log(err.stack);
-//             } else {
-//                 res.send(dbRes.rows);
-//             }
-//         }
-//     );
-// });
+ app.post("/api/me/messages", function(req, res) {
+     client.query(
+         "SELECT chat_message, from_admin FROM messages WHERE from_profile = $1 OR to_profile = $1", [req.session.profile_id],
+         (err, dbRes) => {
+             if (err) {
+                 console.log(err.stack);
+             } else {
+                 res.send(dbRes.rows);
+             }
+         }
+     );
+ });
 
 // app.post("/api/sendMessage", function(req, res) {
 //     if (req.body.message) {

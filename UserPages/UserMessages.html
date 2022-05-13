@@ -39,10 +39,64 @@
         <a href="/messages" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Messages</a>
       </div>
 
-        <!-- Header -->
-        <header class="w3-container w3-blue w3-center" style="padding:384px 16px">
-        </header>
+      <!-- Header-->
+      <!--<header class="w3-container w3-blue w3-center">-->
 
+      <input type='button' value='Load messages' class='messages' id='fetchall'>
+      <!-- Table -->
+
+      <div class="messages">
+        <div class="left">
+          <h3>Messages recieved</h3>
+        </div>
+
+        <div class="right">
+          <h3>Messages sent</h3>
+        </div>
+      </div>
+
+      <input class='messages' type='button' value='Send message'>
+
+      <form class="sendMessage">
+        <label for="message">Message:</label>
+        <input type="text" id="message" name="message" placeholder="Type message">
+        <input type="submit" value="Send">
+      </form>
+
+      <script>
+      //post request to get the messages
+      $.ajax({
+        type: 'post',
+        url: '/api/me/messages',
+        dataType: 'json',
+        data: {
+          requestType: 'fetchall'
+        },
+        success: function(response) {
+          console.log(response)
+          createMessages(response);
+        }
+      });
+
+      function createMessages(response) {
+        for (var i = 0; i < len; i++) {
+          //load messages as variables
+          var chat_message = response[i].chat_message;
+          var from_admin = response[i].from_admin;
+
+          //if message is from admin
+          if (from_admin = 1) {
+            // append to parent container
+            $('.messages').append('<div class="left">+chat_message+</div>');
+          }
+          //if message is one the user has sent
+          else{
+            // append to parent container
+            $('.messages').append('<div class="left">+chat_message+</div>');
+          }
+        }
+        </script>
+        
         <!-- Footer -->
         <footer class="w3-container w3-padding-64 w3-center w3-opacity">
             <p>Created by Group 33 </p>
