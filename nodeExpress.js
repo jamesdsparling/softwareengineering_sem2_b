@@ -349,9 +349,25 @@ app.post("/api/createTicket", function (req, res) {
                                         "tickets_int4range_tsrange_excl"
                                     ) {
                                         console.log("Booking conflict");
-                                        res.send(
-                                            "Sorry, this space is already booked in this time"
+
+                                        let appt_date = new Date(req.body.appt);
+                                        let appt_end = new Date(
+                                            appt_date.getTime() +
+                                                req.body.hours * 60 * 60 * 1000
                                         );
+
+                                        getAvailableSpaces(
+                                            appt_date,
+                                            appt_end,
+                                            (freeSpaces) => {
+                                                res.send(
+                                                    "Sorry, this space is already booked in this time. <br> The following spaces are available at this time though: " +
+                                                        freeSpaces.toString() +
+                                                        '<br> <a href="/dashboard"><- go back</a>'
+                                                );
+                                            }
+                                        );
+                                        
                                     } else {
                                         console.log(err.stack);
                                     }
@@ -395,13 +411,13 @@ function tsrangeOverlap(a_start, a_end, b_start, b_end) {
     return false;
 }
 
-function getAvailableSpaces(appt_Date, appt_end) {
+function getAvailableSpaces(appt_date, appt_end, closure) {
     client.query("SELECT space_id FROM parking_spaces", (err, dbRes) => {
         if (err) {
             console.log(err.stack);
         } else {
-            let spaces = dbRes.rows.map((row) => {
-                return row.parking_space;
+            var freeSpaces = dbRes.rows.map((row) => {
+                return row.space_id;
             });
 
             client.query(
@@ -411,11 +427,29 @@ function getAvailableSpaces(appt_Date, appt_end) {
                     if (err) {
                         console.log(err.stack);
                     } else {
-                        var freeSpaces = [];
-                        freeSpaces = dbRes.rows.forEach((ticket) => {
-                            if (tsrangeOverlap(appt_date, appt_end) == false) {
+                        dbRes.rows.forEach((ticket) => {
+                            let ticket_start = new Date(ticket.requested_time);
+                            let ticket_end = new Date(ticket.end_time);
+
+                            if (
+                                tsrangeOverlap(
+                                    appt_date,
+                                    appt_end,
+                                    ticket_start,
+                                    ticket_end
+                                ) == true
+                            ) {
+                                let index = freeSpaces.indexOf(ticket.space_id);
+                                if (index > -1) {
+                                    console.log(
+                                        "Space not available: " +
+                                            ticket.space_id
+                                    );
+                                    freeSpaces.splice(index, 1);
+                                }
                             }
                         });
+                        closure(freeSpaces);
                     }
                 }
             );
@@ -430,7 +464,10 @@ app.post("/api/getAvailableSpaces", function (req, res) {
             appt_date.getTime() + req.body.hours * 60 * 60 * 1000
         );
 
-        let freeSpaces = getAvailableSpaces(appt_date, appt_end);
+        getAvailableSpaces(appt_date, appt_end, (freeSpaces) => {
+            console.log(freeSpaces);
+            res.send(freeSpaces);
+        });
     }
 });
 

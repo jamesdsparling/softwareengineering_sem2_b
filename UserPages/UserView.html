@@ -866,7 +866,7 @@
                     .getElementsByName("appt")[0]
                     .setAttribute("min", today);
 
-                    $("#checkAvailable").click(function () {
+                $("#checkAvailable").click(function () {
                 console.log("checking available spaces")
                 let appt = $("#appt").val();
                 let hours = $("#hours").val();
@@ -877,8 +877,8 @@
                         hours: hours,
                     },
                     function (data, status) {
-                        console.log(status);
-                        console.log(data);
+                        console.log("Got free spaces: " + data);
+                        $("#availableSpaces").text("Available spaces: " + String(data))
                     }
                 );
             });
