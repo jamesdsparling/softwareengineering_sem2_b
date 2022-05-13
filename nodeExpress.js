@@ -11,18 +11,30 @@ const { Client } = require("pg");
 const app = express();
 const port = 3000;
 
+var nodemailer = require("nodemailer");
+
 // pass.txt should be in root directory containing ONLY 1 LINE with the password for postgres
-const buffer = fs.readFileSync("pass.txt");
+const dbPass = fs.readFileSync("pass.txt");
 
 // DB connection client setup
 const client = new Client({
     user: "defaultuser",
     host: "localhost",
     database: "SoftEng",
-    password: buffer.toString(), // pass.txt (See gitignore commit messages)
+    password: dbPass.toString(), // pass.txt (See gitignore commit messages)
     port: 5432,
 });
 client.connect();
+
+const emailPass = fs.readFileSync("emailPass.txt");
+
+var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "james.sparling.test.email@gmail.com",
+        pass: emailPass.toString(),
+    },
+});
 
 function presentWithAccess(link, public, user, admin) {
     app.get(link, function (req, res) {
@@ -257,6 +269,26 @@ app.post("/api/auth/signup", function (req, res) {
                         // Log the new user to the console
                         console.log(dbRes.rows[0]);
 
+                        var mailOptions = {
+                            from: "james.sparling.test.email@gmail.com",
+                            to: dbRes.rows[0].email,
+                            subject: "Parking account created!",
+                            text:
+                                "You have successfully created an account with the email: " +
+                                dbRes.rows[0].email,
+                        };
+
+                        transporter.sendMail(
+                            mailOptions,
+                            function (error, info) {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    console.log("Email sent: " + info.response);
+                                }
+                            }
+                        );
+
                         // Temporary solution. User is still created even if continue is not pressed.
                         res.send(
                             'By clicking continue you agree to accept our <a href="/privacy.html">privacy permissions</a> <br> <a href="/">Continue...</a>'
@@ -356,16 +388,49 @@ app.post("/api/createTicket", function (req, res) {
     }
 });
 
+function tsrangeOverlap(a_start, a_end, b_start, b_end) {
+    if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
+    if (a_start <= b_end && b_end <= a_end) return true; // b ends in a
+    if (b_start < a_start && a_end < b_end) return true; // a in b
+    return false;
+}
+
+function getAvailableSpaces(appt_Date, appt_end) {
+    client.query("SELECT space_id FROM parking_spaces", (err, dbRes) => {
+        if (err) {
+            console.log(err.stack);
+        } else {
+            let spaces = dbRes.rows.map((row) => {
+                return row.parking_space;
+            });
+
+            client.query(
+                "SELECT space_id, requested_time, end_time FROM tickets",
+                (err, dbRes) => {
+                    // err & dbRes overridden as no longer needed
+                    if (err) {
+                        console.log(err.stack);
+                    } else {
+                        var freeSpaces = [];
+                        freeSpaces = dbRes.rows.forEach((ticket) => {
+                            if (tsrangeOverlap(appt_date, appt_end) == false) {
+                            }
+                        });
+                    }
+                }
+            );
+        }
+    });
+}
+
 app.post("/api/getAvailableSpaces", function (req, res) {
     if ((req.body.appt, req.body.hours)) {
-        /* SQL Query needed:
+        let appt_date = new Date(req.body.appt);
+        let appt_end = new Date(
+            appt_date.getTime() + req.body.hours * 60 * 60 * 1000
+        );
 
-        SELECT space_id from parking_spaces
-        (^ REMOVE FROM USING:)
-        SELECT space_id from ticets WHERE (ticket date range overlaps with input date range)
-
-        */
-        // client.query("SELECT space_id from parking_spaces WHERE ")
+        let freeSpaces = getAvailableSpaces(appt_date, appt_end);
     }
 });
 
