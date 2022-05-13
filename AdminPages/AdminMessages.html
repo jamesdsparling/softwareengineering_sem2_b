@@ -5,26 +5,10 @@
     <title>Messages</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="stylesheet3.css">
+    <!-- <link rel="stylesheet" href="stylesheet3.css"> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-    <style>
-        body,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: "Lato", sans-serif
-        }
-        
-        .w3-bar,
-        h1,
-        button {
-            font-family: "Montserrat", sans-serif
-        }
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -43,80 +27,19 @@
         <!--<header class="w3-container w3-blue w3-center">-->
 
 
-        <input type='button' value='Load messages' class='messages' id='fetchall'>
-
-        <!-- Table -->
-        <table id='ticketTable'>
-            <thead>
-                <tr>
-                    <th>Customer ID</th>
-                    <th>Message</th>
-                    <th>Clear?</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <input class='messages' type='button' value='Send message'>
-
-        <form class="sendMessage">
-            <label for="customer_id">Customer's ID:</label>
-            <input type="text" id="customer_id" name="customer_id" placeholder="Customer's ID">
-            <label for="message">Message:</label>
-            <input type="text" id="message" name="message" placeholder="Type message">
-            <input type="submit" value="Send">
-        </form>
-
+        <!-- <form> -->
+            <label for="userID">User ID:</label>
+            <input type="text" id="userID" name="userID">
+            <input type="submit" value="Go to messages" onClick='goToMessages()'>
+        <!-- </form> -->
 
         <script>
-            $(document).ready(function() {
+           function goToMessages() {
+               let userID = $("#userID").val()
+               console.log(userID)
+               window.location.href = "/messages/" + userID
+           } 
 
-                // Fetch all records
-                $('#fetchall').click(function() {
-                    // AJAX GET request
-                    $.ajax({
-                        type: 'post',
-                        url: '/api/admin/messages',
-                        dataType: 'json',
-                        data: {
-                            requestType: 'fetchall'
-                        },
-                        success: function(response) {
-                            console.log(response)
-                            createRows(response);
-                        }
-                    });
-                });
-            });
-
-            // Create table rows
-            function createRows(response) {
-                var len = 0;
-                $('#userTable tbody').empty(); // Empty <tbody>
-                if (response != null) {
-                    len = response.length;
-                }
-                if (len > 0) {
-                    for (var i = 0; i < len; i++) {
-                        var customer_id = response[i].customer_id;
-                        var chat_message = response[i].chat_message;
-
-                        var tr_str = "<tr>" +
-                            "<td align='center'>" + customer_id + "</td>" +
-                            "<td align='center'>" + chat_message + "</td>" +
-                            "<td align='center'><button name='yes" + id + "' id='yes" + id + "'>Yes</button> + +
-                            "</tr>";
-
-                        $("#userTable tbody").append(tr_str);
-                    }
-                } else {
-                    var tr_str = "<tr>" +
-                        "<td align='center' colspan='4'>No record found.</td>" +
-                        "</tr>";
-
-                    $("#userTable tbody").append(tr_str);
-                }
-            }
         </script>
 
 

@@ -614,14 +614,13 @@ app.post("/api/me/messages", (req, res) => {
         let profile_id = req.session.profile_id;
         if (req.session.admin == true) {
             if (req.headers.referer) {
-                console.log(req.headers.referer.split("messages/"));
                 profile_id = req.headers.referer.split("messages/")[1];
             }
         }
-        console.log(profile_id);
+        // console.log("Getting messages for profile id: " + profile_id);
 
         client.query(
-            "SELECT chat_message, from_admin FROM messages WHERE profile_id = $1",
+            "SELECT chat_message, from_admin FROM messages WHERE profile_id = $1 ORDER BY time_sent",
             [profile_id],
             (err, dbRes) => {
                 if (err) {
@@ -632,7 +631,7 @@ app.post("/api/me/messages", (req, res) => {
                         message.from_me =
                             message.from_admin == req.session.admin;
                     });
-                    console.log(messages);
+                    // console.log(messages);
                     res.send(messages);
                 }
             }
@@ -642,21 +641,24 @@ app.post("/api/me/messages", (req, res) => {
 
 app.post("/api/sendMessage", function (req, res) {
     if (req.session.loggedin) {
+        let profile_id = req.session.profile_id;
+        if (req.session.admin == true) {
+            if (req.headers.referer) {
+                profile_id = req.headers.referer.split("messages/")[1];
+            }
+        }
+
         if (req.body.message) {
             client.query(
                 "INSERT INTO messages(profile_id, chat_message, from_admin) VALUES ($1, $2, $3) RETURNING *",
-                [
-                    req.session.profile_id,
-                    req.body.message,
-                    req.session.admin == true,
-                ],
+                [profile_id, req.body.message, req.session.admin == true],
                 (err, dbRes) => {
                     if (err) {
                         console.log(err.stack);
                     } else {
                         console.log("Sent message");
                         console.log(dbRes.rows[0]);
-                        res.redirect("/messages");
+                        res.redirect("back");
                     }
                 }
             );

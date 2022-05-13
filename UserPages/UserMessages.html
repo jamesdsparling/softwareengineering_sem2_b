@@ -92,8 +92,6 @@
                 </div> -->
             </div>
 
-            <input class="messages" type="button" value="Send message" />
-
             <form class="sendMessage" method="POST" action="/api/sendMessage">
                 <label for="message">Message:</label>
                 <input
@@ -106,22 +104,25 @@
             </form>
 
             <script>
-                $.post("/api/me/messages", (response) => {
-                            console.log(response);
-                            createMessages(response);
-                        }
-                    );
-                    
-                //post request to get the messages
-                $("#fetchall").click(() => {
+                function refreshMessages() {
                     $.post("/api/me/messages", (response) => {
-                            console.log(response);
-                            createMessages(response);
-                        }
-                    );
-                });
+                        // console.log(response);
+                        createMessages(response);
+                    });
+                }
+                refreshMessages()
+
+                $("#fetchall").click(() => {
+                        refreshMessages()
+                    });
+
+                //post request to get the messages
+                setInterval(() => {
+                   refreshMessages() 
+                }, 1000);
 
                 function createMessages(response) {
+                    $(".messages").empty();
                     response.forEach((message) => {
                         //load messages as variables
                         var chat_message = message.chat_message;
@@ -131,17 +132,21 @@
                         if (message.from_me) {
                             // append to parent container
                             $(".messages").append(
-                                '<div class="right"> <h3>' + message.chat_message + '</h3> </div> <br>'
+                                '<div class="right"> <h3>' +
+                                    message.chat_message +
+                                    "</h3> </div> <br>"
                             );
                         }
                         //if message is one the user has sent
                         else {
                             // append to parent container
                             $(".messages").append(
-                                '<div class="left"> <h3>' + message.chat_message + '</h3> </div> <br>'
+                                '<div class="left"> <h3>' +
+                                    message.chat_message +
+                                    "</h3> </div> <br>"
                             );
                         }
-                    })
+                    });
                 }
             </script>
 

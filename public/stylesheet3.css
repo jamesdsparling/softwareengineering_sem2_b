@@ -303,6 +303,7 @@ form h2{
 label{
     display: block;
     margin-top: 10%;
+    color: black;
 }
 
 input{
