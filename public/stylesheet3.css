@@ -580,7 +580,7 @@ th {
   display: none;
 }
 
-.settings{
+.settings, .sendMessage  {
   display: block;
   margin-top: 0em;
 	transform: none;
@@ -589,15 +589,15 @@ th {
 	box-shadow: none;
 	padding: 0px;
 }
-.settings *{
+.settings, .sendMessage  *{
 	color: black;
 	outline: black;
 	border: medium none color;
 }
-.settings label{
+.settings, .sendMessage  label{
 	margin-top: 0;
 }
-.settings input {
+.settings, .sendMessage input {
 	height: auto;
 	width: 100%;
 	background-color: transparent;
@@ -607,4 +607,12 @@ th {
 	margin-top: 0px;
 	border-radius: 1px;
 	border: 1px solid black;
+}
+
+.left{
+  float: left;
+}
+
+.right{
+  float: right;
 }
