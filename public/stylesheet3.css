@@ -610,9 +610,9 @@ th {
 }
 
 .left{
-  float: left;
+  text-align: left;
 }
 
 .right{
-  float: right;
+  text-align: right;
 }

@@ -329,7 +329,7 @@ app.post("/api/createTicket", function (req, res) {
                     if (dbRes.rows[0].balance < price) {
                         console.log("Error: user too broke");
                         res.send(
-                            'Balance not sufficient. Please add £' +
+                            "Balance not sufficient. Please add £" +
                                 String((price - dbRes.rows[0].balance) / 100) +
                                 ' to your account. <br> <a href="/dashboard"><- go back</a>'
                         );
@@ -367,7 +367,6 @@ app.post("/api/createTicket", function (req, res) {
                                                 );
                                             }
                                         );
-
                                     } else {
                                         console.log(err.stack);
                                     }
@@ -384,7 +383,9 @@ app.post("/api/createTicket", function (req, res) {
                                                     "New ticket booked"
                                                 );
                                                 console.log(booking);
-                                                res.send('Ticket booked successfully!! <a href="/dashboard"><- go back</a>');
+                                                res.send(
+                                                    'Ticket booked successfully!! <a href="/dashboard"><- go back</a>'
+                                                );
                                             }
                                         }
                                     );
@@ -483,7 +484,9 @@ app.post("/api/me/updatePlate", function (req, res) {
                     } else {
                         console.log("Registration plate updated");
                         console.log(dbRes.rows[0]);
-                        res.send('Registration plate updated! <br> <a href="/settings"><- go back</a>');
+                        res.send(
+                            'Registration plate updated! <br> <a href="/settings"><- go back</a>'
+                        );
                     }
                 }
             );
@@ -492,7 +495,7 @@ app.post("/api/me/updatePlate", function (req, res) {
 });
 
 app.post("/api/me/updateCard", function (req, res) {
-    if (req.session.loggedin == true) { 
+    if (req.session.loggedin == true) {
         if ((req.body.cardnumber, req.body.fullname, req.body.cvv)) {
             client.query(
                 "UPDATE profiles SET card_num = $1, card_name = $2, card_cvv = $3 WHERE profile_id = $4 RETURNING *",
@@ -511,7 +514,7 @@ app.post("/api/me/updateCard", function (req, res) {
             );
         }
     }
-})
+});
 
 app.post("/api/admin/updateTicketStatus", function (req, res) {
     if (req.session.admin == true) {
@@ -597,18 +600,21 @@ app.post("/api/admin/tickets", function (req, res) {
     }
 });
 
- app.post("/api/me/messages", function(req, res) {
-     client.query(
-         "SELECT chat_message, from_admin FROM messages WHERE from_profile = $1 OR to_profile = $1", [req.session.profile_id],
-         (err, dbRes) => {
-             if (err) {
-                 console.log(err.stack);
-             } else {
-                 res.send(dbRes.rows);
-             }
-         }
-     );
- });
+app.post("/api/me/messages", function (req, res) {
+    if (req.session.loggedin) {
+        client.query(
+            "SELECT chat_message, from_admin FROM messages WHERE profile_id = $1",
+            [req.session.profile_id],
+            (err, dbRes) => {
+                if (err) {
+                    console.log(err.stack);
+                } else {
+                    res.send(dbRes.rows);
+                }
+            }
+        );
+    }
+});
 
 // app.post("/api/sendMessage", function(req, res) {
 //     if (req.body.message) {
