@@ -497,10 +497,20 @@ app.post("/api/me/updatePlate", (req, res) => {
 
 app.post("/api/me/updateCard", (req, res) => {
     if (req.session.loggedin == true) {
-        if ((req.body.cardnumber, req.body.fullname, req.body.cvv)) {
+        if (
+            (req.body.fullname,
+            req.body.cardnumber,
+            req.body.expiry,
+            req.body.cvv)
+        ) {
             client.query(
                 "UPDATE profiles SET card_num = $1, card_name = $2, card_cvv = $3 WHERE profile_id = $4 RETURNING *",
-                [req.body.cardnumber, req.body.fullname, req.body.cvv],
+                [
+                    req.body.cardnumber,
+                    req.body.fullname,
+                    req.body.cvv,
+                    req.session.profile_id,
+                ],
                 (err, dbRes) => {
                     if (err) {
                         console.log(err.stack);
