@@ -493,16 +493,22 @@ app.post("/api/me/updatePlate", function (req, res) {
 
 app.post("/api/me/updateCard", function (req, res) {
     if (req.session.loggedin == true) { 
-        if (req.body.cardnumber, req.body.fullname, req.body.cvv) {}
-            client.query("UPDATE profiles SET card_num = $1, card_name = $2, card_cvv = $3 WHERE profile_id = $4 RETURNING *", [req.body.cardnumber, req.body.fullname, req.body.cvv], (err, dbRes) => {
-                if (err) {
-                    console.log(err.stack);
-                } else {
-                    console.log("Card details updated")
-                    console.log(dbRes.rows[0]);
-                    res.send('Card details updated! <br> <a href="/settings"><- go back</a>');
+        if ((req.body.cardnumber, req.body.fullname, req.body.cvv)) {
+            client.query(
+                "UPDATE profiles SET card_num = $1, card_name = $2, card_cvv = $3 WHERE profile_id = $4 RETURNING *",
+                [req.body.cardnumber, req.body.fullname, req.body.cvv],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err.stack);
+                    } else {
+                        console.log("Card details updated");
+                        console.log(dbRes.rows[0]);
+                        res.send(
+                            'Card details updated! <br> <a href="/settings"><- go back</a>'
+                        );
+                    }
                 }
-            })
+            );
         }
     }
 })
