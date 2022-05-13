@@ -876,9 +876,10 @@
                         appt: appt,
                         hours: hours,
                     },
-                    function (data, status) {
+                    (data, status) => {
                         console.log("Got free spaces: " + data);
-                        $("#availableSpaces").text("Available spaces: " + String(data))
+                        let spacesString = data.map((space) => String(space + 1))
+                        $("#availableSpaces").text("Available spaces: " + spacesString)
                     }
                 );
             });

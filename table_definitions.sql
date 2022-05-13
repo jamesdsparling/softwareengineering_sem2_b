@@ -39,7 +39,7 @@ create table tickets (
 create table messages (
     message_id SERIAL primary key,
 	profile_id int references profiles(profile_id),
-	time_sent timestamp,
+	time_sent timestamp DEFAULT CURRENT_TIMESTAMP,
 	chat_message varchar(300) not null,
-	from_admin bool not null
+	from_admin bool not null DEFAULT false
 );

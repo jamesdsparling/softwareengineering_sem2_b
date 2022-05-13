@@ -94,7 +94,7 @@
 
             <input class="messages" type="button" value="Send message" />
 
-            <form class="sendMessage">
+            <form class="sendMessage" method="POST" action="/api/sendMessage">
                 <label for="message">Message:</label>
                 <input
                     type="text"
@@ -106,6 +106,12 @@
             </form>
 
             <script>
+                $.post("/api/me/messages", (response) => {
+                            console.log(response);
+                            createMessages(response);
+                        }
+                    );
+                    
                 //post request to get the messages
                 $("#fetchall").click(() => {
                     $.post("/api/me/messages", (response) => {

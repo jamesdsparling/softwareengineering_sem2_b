@@ -37,7 +37,7 @@ var transporter = nodemailer.createTransport({
 });
 
 function presentWithAccess(link, public, user, admin) {
-    app.get(link, function (req, res) {
+    app.get(link, (req, res) => {
         //Check if logged in
         if (req.session.loggedin) {
             //Check if admin
@@ -119,7 +119,7 @@ app.use(
 // TEMPORARY CODE!!!!
 // Probably replace with an index type page once it has been made
 // Displayed page MUST offer a link to sign in/up
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
     res.redirect("/Homepage.html"); // redirect("/index") ??? or maybe always attempt dashboard and redirect to index if not logged in
 });
 
@@ -173,7 +173,7 @@ presentWithAccess(
     "/AdminPages/ModifyUser.html"
 );
 
-app.post("/api/auth/signin", function (req, res) {
+app.post("/api/auth/signin", (req, res) => {
     // Ensure input fields not empty
     if (req.body.email && req.body.password) {
         // Query id and password for user with given email
@@ -232,15 +232,15 @@ function signOut(req, res) {
     res.redirect("/signin.html");
 }
 
-app.post("/api/auth/signout", function (req, res) {
+app.post("/api/auth/signout", (req, res) => {
     signOut(req, res);
 });
 
-app.get("/signout", function (req, res) {
+app.get("/signout", (req, res) => {
     signOut(req, res);
 });
 
-app.post("/api/auth/signup", function (req, res) {
+app.post("/api/auth/signup", (req, res) => {
     // Just make sure they entered an email & password.
     // Don't really care about any of the other data yet.
     // firstname / lastname / phonenumber also available in req.body
@@ -305,13 +305,14 @@ app.post("/api/auth/signup", function (req, res) {
     }
 });
 
-app.post("/api/createTicket", function (req, res) {
+app.post("/api/createTicket", (req, res) => {
     if (
         (req.session.profile_id,
         req.body.appt,
         req.body.hours,
         req.body.space_id)
     ) {
+        let space_id = req.body.space_id - 1;
         let price = calculatePrice(parseInt(req.body.hours));
         // client.query("SELECT balance FROM profile WHERE profile_id = $1", [req.session.profile_id], (err, dbRes) => {
         //         if (err) {
@@ -338,7 +339,7 @@ app.post("/api/createTicket", function (req, res) {
                             "INSERT INTO tickets(profile_id, space_id, requested_time, stay_hours) VALUES ($1, $2, $3, $4) RETURNING *",
                             [
                                 req.session.profile_id,
-                                req.body.space_id,
+                                space_id,
                                 req.body.appt,
                                 req.body.hours,
                             ],
@@ -384,7 +385,7 @@ app.post("/api/createTicket", function (req, res) {
                                                 );
                                                 console.log(booking);
                                                 res.send(
-                                                    'Ticket booked successfully!! <a href="/dashboard"><- go back</a>'
+                                                    'Ticket booked successfully!! <br> <a href="/dashboard"><- go back</a>'
                                                 );
                                             }
                                         }
@@ -458,7 +459,7 @@ function getAvailableSpaces(appt_date, appt_end, closure) {
     });
 }
 
-app.post("/api/getAvailableSpaces", function (req, res) {
+app.post("/api/getAvailableSpaces", (req, res) => {
     if ((req.body.appt, req.body.hours)) {
         let appt_date = new Date(req.body.appt);
         let appt_end = new Date(
@@ -472,7 +473,7 @@ app.post("/api/getAvailableSpaces", function (req, res) {
     }
 });
 
-app.post("/api/me/updatePlate", function (req, res) {
+app.post("/api/me/updatePlate", (req, res) => {
     if (req.session.loggedin == true) {
         if (req.body.registration_plate) {
             client.query(
@@ -494,7 +495,7 @@ app.post("/api/me/updatePlate", function (req, res) {
     }
 });
 
-app.post("/api/me/updateCard", function (req, res) {
+app.post("/api/me/updateCard", (req, res) => {
     if (req.session.loggedin == true) {
         if ((req.body.cardnumber, req.body.fullname, req.body.cvv)) {
             client.query(
@@ -516,7 +517,7 @@ app.post("/api/me/updateCard", function (req, res) {
     }
 });
 
-app.post("/api/admin/updateTicketStatus", function (req, res) {
+app.post("/api/admin/updateTicketStatus", (req, res) => {
     if (req.session.admin == true) {
         if ((req.body.ticket_id, req.body.is_accepted)) {
             console.log(req.body.is_accepted);
@@ -553,7 +554,7 @@ app.post("/api/admin/updateTicketStatus", function (req, res) {
     }
 });
 
-app.post("/api/me/tickets", function (req, res) {
+app.post("/api/me/tickets", (req, res) => {
     if (req.session.loggedin == true) {
         client.query(
             "SELECT ticket_id, space_id, requested_time, stay_hours FROM tickets WHERE tickets.profile_id = $1",
@@ -569,7 +570,7 @@ app.post("/api/me/tickets", function (req, res) {
     }
 });
 
-app.post("/api/me/profiles", function (req, res) {
+app.post("/api/me/profiles", (req, res) => {
     if (req.session.loggedin == true) {
         client.query(
             "SELECT cardnum FROM profiles WHERE tickets.profile_id = $1",
@@ -585,7 +586,7 @@ app.post("/api/me/profiles", function (req, res) {
     }
 });
 
-app.post("/api/admin/tickets", function (req, res) {
+app.post("/api/admin/tickets", (req, res) => {
     if (req.session.admin == true) {
         client.query(
             "SELECT ticket_id, requested_time, stay_hours, is_accepted, space_id FROM tickets",
@@ -600,7 +601,7 @@ app.post("/api/admin/tickets", function (req, res) {
     }
 });
 
-app.post("/api/me/messages", function (req, res) {
+app.post("/api/me/messages", (req, res) => {
     if (req.session.loggedin) {
         client.query(
             "SELECT chat_message, from_admin FROM messages WHERE profile_id = $1",
@@ -616,22 +617,29 @@ app.post("/api/me/messages", function (req, res) {
     }
 });
 
-// app.post("/api/sendMessage", function(req, res) {
-//     if (req.body.message) {
-//         client.query(
-//             "INSERT INTO messages(message, from_profiles, to_profiles) VALUES ($1, $2, $3) RETURNING *", [req.body.message, req.session.profile_id, 1],
-//             (err, dbRes) => {
-//                 if (err) {
-//                     console.log(err.stack);
-//                 } else {
-//                     console.log("Sent message");
-//                     console.log(dbRes.rows[0]);
-//                     res.redirect("/dashboard");
-//                 }
-//             }
-//         );
-//     }
-// });
+app.post("/api/sendMessage", function (req, res) {
+    if (req.session.loggedin) {
+        if (req.body.message) {
+            client.query(
+                "INSERT INTO messages(profile_id, chat_message, from_admin) VALUES ($1, $2, $3) RETURNING *",
+                [
+                    req.session.profile_id,
+                    req.body.message,
+                    req.session.admin == true,
+                ],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err.stack);
+                    } else {
+                        console.log("Sent message");
+                        console.log(dbRes.rows[0]);
+                        res.redirect("/messages");
+                    }
+                }
+            );
+        }
+    }
+});
 
 // app.post("/api/admin/sendMessage", function(req, res) {
 //     if (req.session.admin) {
@@ -652,7 +660,7 @@ app.post("/api/me/messages", function (req, res) {
 //     }
 // });
 
-app.post("/api/admin/updateProfile", function (req, res) {
+app.post("/api/admin/updateProfile", (req, res) => {
     if (req.session.admin == true) {
         if (req.body.profile_id) {
             if (req.body.email) {
