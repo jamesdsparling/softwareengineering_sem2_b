@@ -161,12 +161,6 @@ presentWithAccess(
     "/AdminPages/AdminMessages.html"
 );
 presentWithAccess(
-    "/map",
-    "/signin.html",
-    "/UserPages/UserView.html",
-    "/AdminPages/ManageMap.html"
-);
-presentWithAccess(
     "/map2",
     "signin.html",
     "signin.html",
@@ -425,6 +419,10 @@ app.post("/api/createTicket", (req, res) => {
         //         }
         //     }
         // })
+    } else {
+        res.send(
+            'Please fill in all fields. <br> <a href="/dashboard"><- go back</a>'
+        );
     }
 });
 
@@ -740,6 +738,41 @@ app.post("/api/admin/tickets", (req, res) => {
                 }
             }
         );
+    }
+});
+
+app.post("/api/getStatus", (req, res) => {
+    if (req.session.loggedin) {
+        if (req.body.space_id) {
+            client.query(
+                "SELECT ticket_id, profile_id, requested_time, end_time from tickets WHERE space_id = $1",
+                [req.body.space_id],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        let booked;
+                        dbRes.rows.forEach((row) => {
+                            let startDate = new Date(row.requested_time);
+                            let endDate = new Date(row.end_time);
+                            let currentTime = new Date();
+                            console.log(row);
+                            if (
+                                startDate < currentTime &&
+                                endDate > currentTime
+                            ) {
+                                console.log("Space booked");
+                                booked = row;
+                            }
+                        });
+                        console.log("Space free");
+                        res.send(booked);
+                    }
+                }
+            );
+        }
+    } else {
+        res.redirect("/signin.html");
     }
 });
 

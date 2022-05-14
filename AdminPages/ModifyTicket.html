@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Modify Ticket</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheet3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif
+        }
+
+        .w3-bar,
+        h1,
+        button {
+            font-family: "Montserrat", sans-serif
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-large">
+            <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-blue-grey" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a href="/dashboard" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Dashboard</a>
+            <a href="/tickets" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Manage Ticket Requests</a>
+            <a href="/map" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Manage Map</a>
+            <a href="/modifyuser" class="w3-bar-item w3-button w3-padding-large w3-white">Modify User</a>
+            <a href="/messages" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Messages</a>
+        </div>
+
+        <!-- Header
+        <header class="w3-container w3-blue w3-center" style="padding:384px 16px">
+        </header>-->
+
+        <!--Find user who's details admin wants to change-->
+        <div id="selectUser">
+          <form class="second_form" id="modify-ticket" method="POST" action="/api/admin/updateTicketDetails">
+            <h3 class="updateTitle">Change a ticket's details</h3>
+
+            <label for="ticket_id">User ID</label>
+            <input type="text" name="ticket_id" placeholder="Ticket's ID" id="ticket_id">
+
+            <button name="deleteTicket" id="deleteTicket" style="color: black;" type="button">Delete this ticket</button>
+
+            <p id="confirmMessage" style="color: black"></p>
+
+            <label for="ticket-attribute">Attribute (dropdown)</label>
+            <select name="ticket-attribute" id="ticket-attribute">
+              <option value="profile_id">Profile ID</option>
+              <option value="space_id">Space ID</option>
+              <option value="requested_time">Requested Time</option>
+              <option value="stay_hours">Duration</option>
+              <option value="is_accepted">Ticket status</option>
+            </select>
+
+            <label for="new_value">Updated information</label>
+            <input type="text" name="new_value" placeholder="" required="">
+
+            <input type="submit" id="submit" value="Update ticket">
+          </form>
+        </div>
+
+        <script>
+            $("#deleteUser").click(() => {
+                let profile_id = $("#profile_id").val()
+                $.post("/api/admin/deleteUser", {"profile_id" : profile_id}, (data, status) => {
+                    console.log(status);
+                    console.log(data)
+                    if (status = 'success') {
+                        if (data.length > 0) {
+                            $("#confirmMessage").text("User deleted")
+                        } else {
+                            $("#confirmMessage").text("User not found")
+                        }
+                    }
+                })
+            })
+        </script>
+
+        <!-- Footer -->
+        <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+            <p>Created by Group 33 </p>
+        </footer>
+
+</body>
+
+
+</html>
