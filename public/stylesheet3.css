@@ -517,25 +517,25 @@ div {
   margin: auto;
 }
 
-.update, .sendMessage, .updateTicket, .addBalance{
+.second_form  {
   display: block;
   margin-top: 0em;
-  transform: none;
-  position: static;
-  background-color: transparent;
-  box-shadow: none;
-  padding: 0px;
+	transform: none;
+	position: static;
+	background-color: transparent;
+	box-shadow: none;
+	padding: 0px;
 }
-.update, .sendMessage, .updateTicket, .addBalance  *{
-  color: black;
+.second_form   *{
+	color: black;
 	outline: black;
 	border: medium none color;
 }
-.update, .sendMessage, .updateTicket, .addBalance label{
+.second_form label{
 	margin-top: 0;
 }
-.update, .sendMessage, .updateTicket, .addBalance input {
-  height: auto;
+.second_form input {
+	height: auto;
 	width: 100%;
 	background-color: transparent;
 	padding: 12px 20px;
@@ -579,35 +579,6 @@ th {
 
 #paymentMethod{
   display: none;
-}
-
-.settings, .sendMessage  {
-  display: block;
-  margin-top: 0em;
-	transform: none;
-	position: static;
-	background-color: transparent;
-	box-shadow: none;
-	padding: 0px;
-}
-.settings, .sendMessage  *{
-	color: black;
-	outline: black;
-	border: medium none color;
-}
-.settings, .sendMessage  label{
-	margin-top: 0;
-}
-.settings, .sendMessage input {
-	height: auto;
-	width: 100%;
-	background-color: transparent;
-	padding: 12px 20px;
-	margin: 8px 0;
-	box-sizing: border-box;
-	margin-top: 0px;
-	border-radius: 1px;
-	border: 1px solid black;
 }
 
 .left{

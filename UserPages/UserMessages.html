@@ -92,7 +92,7 @@
                 </div> -->
             </div>
 
-            <form class="sendMessage" method="POST" action="/api/sendMessage">
+            <form class="second_form" id="sendMessage" method="POST" action="/api/sendMessage">
                 <label for="message">Message:</label>
                 <input
                     type="text"
@@ -118,7 +118,7 @@
 
                 //post request to get the messages
                 setInterval(() => {
-                   refreshMessages() 
+                   refreshMessages()
                 }, 1000);
 
                 function createMessages(response) {
