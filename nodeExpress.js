@@ -527,6 +527,64 @@ app.post("/api/me/updateCard", (req, res) => {
     }
 });
 
+app.post("/api/me/addBalance", (req, res) => {
+    if (req.session.loggedin) {
+        if ((req.body.amount, req.body.cvv)) {
+            if (req.body.amount > 0) {
+                client.query(
+                    "SELECT card_cvv FROM profiles WHERE profile_id = $1",
+                    [req.session.profile_id],
+                    (err, dbRes) => {
+                        if (err) {
+                            console.log(err.stack);
+                        } else {
+                            if (dbRes.rows[0].card_cvv == req.body.cvv) {
+                                client.query(
+                                    "UPDATE profiles SET balance = balance + $1 WHERE profile_id = $2 RETURNING *",
+                                    [req.body.amount, req.session.profile_id],
+                                    (err, dbRes) => {
+                                        if (err) {
+                                            if (
+                                                err.routine == "pg_strtoint32"
+                                            ) {
+                                                res.send(
+                                                    'Invalid balance. <br> <a href="/addbalance"><- go back</a>'
+                                                );
+                                            } else {
+                                                console.log(err.stack);
+                                            }
+                                        } else {
+                                            console.log("Updated balance");
+                                            console.log(dbRes.rows[0]);
+                                            let newBalance =
+                                                dbRes.rows[0].balance;
+                                            res.send(
+                                                "Success! Balance added. <br> New balance: " +
+                                                    String(newBalance) +
+                                                    '<br> <a href="/addbalance"><- go back</a>'
+                                            );
+                                        }
+                                    }
+                                );
+                            } else {
+                                res.send(
+                                    'Incorrect cvv number. <br> <a href="/addbalance"><- go back</a>'
+                                );
+                            }
+                        }
+                    }
+                );
+            } else {
+                res.send(
+                    'Do not enter a negative number. idiot <br> <a href="/addbalance"><- go back</a>'
+                );
+            }
+        }
+    } else {
+        res.redirect("signin.html");
+    }
+});
+
 app.post("/api/admin/updateUserDetails", (req, res) => {
     if (req.session.admin == true) {
         if (

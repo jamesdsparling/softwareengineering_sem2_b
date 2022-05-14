@@ -25,6 +25,7 @@
             font-family: "Montserrat", sans-serif
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -56,9 +57,9 @@
         <p class="usersettings">Add balance</p>
 
         <!-- form to add balance -->
-        <form class="addBalance">
+        <form class="addBalance" method="POST" action="/api/me/addBalance">
           <label for="amount">Amount to add:</label>
-          <input type="int" id="amount" name="space_id" placeholder="£">
+          <input type="int" id="amount" name="amount" placeholder="£">
 
           <label for="cvv">Confirm card cvv number:</label>
           <input type="text" id="cvv" name="cvv" placeholder="cvv">
