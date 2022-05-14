@@ -52,6 +52,7 @@
               <th>Space ID</th>
               <th>Start Time</th>
               <th>Length of stay</th>
+              <th>Directions</th>
               <th>Cancel?</th>
             </tr>
           </thead>
@@ -93,12 +94,18 @@
                 var space_id = response[i].space_id;
                 var requested_time = response[i].requested_time;
                 var stay_hours = response[i].stay_hours;
+
+                //use space_id to find image directions to that space
+                let space = space_id.toString(10);
+                var image_id = "spaceid" + space + ".svg"
+
                 var tr_str = "<tr>" +
                     "<td align='center'>" + ticket_id + "</td>" +
                     "<td align='center'>" + space_id + "</td>" +
                     "<td align='center'>" + requested_time + "</td>" +
                     "<td align='center'>" + stay_hours + "</td>" +
                     "<td align='center'><button name='yes"+id+"' id='yes"+id+"'>Yes</button></td>" +
+                    "<td align='center'><img src=\""+image_id+"\"/></td>" +
                     +"</tr>";
 
                 $("#ticketTable tbody").append(tr_str);
