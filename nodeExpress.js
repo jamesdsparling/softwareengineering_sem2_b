@@ -167,6 +167,12 @@ presentWithAccess(
     "/AdminPages/ManageMap.html"
 );
 presentWithAccess(
+    "/map2",
+    "signin.html",
+    "signin.html",
+    "/AdminPages/AdminManageMap2.html"
+);
+presentWithAccess(
     "/modifyuser",
     "/signin.html",
     "/UserPages/UserView.html",
@@ -361,9 +367,13 @@ app.post("/api/createTicket", (req, res) => {
                                             appt_date,
                                             appt_end,
                                             (freeSpaces) => {
+                                                let displaySpces =
+                                                    freeSpaces.map((space) => {
+                                                        return space + 1;
+                                                    });
                                                 res.send(
                                                     "Sorry, this space is already booked in this time. <br> The following spaces are available at this time though: " +
-                                                        freeSpaces.toString() +
+                                                        displaySpces.toString() +
                                                         '<br> <a href="/dashboard"><- go back</a>'
                                                 );
                                             }
