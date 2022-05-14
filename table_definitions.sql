@@ -27,7 +27,7 @@ create table parking_spaces (
 
 create table tickets (
 	ticket_id SERIAL primary key,
-	profile_id int not null references profiles(profile_id),
+	profile_id int not null references profiles(profile_id) ON DELETE CASCADE,
 	space_id int not null references parking_spaces(space_id),
 	requested_time timestamp not null,
     stay_hours int not null CHECK (stay_hours >= 0),
@@ -38,7 +38,7 @@ create table tickets (
 
 create table messages (
     message_id SERIAL primary key,
-	profile_id int references profiles(profile_id),
+	profile_id int references profiles(profile_id) ON DELETE CASCADE,
 	time_sent timestamp DEFAULT CURRENT_TIMESTAMP(0),
 	chat_message varchar(300) not null,
 	from_admin bool not null DEFAULT false

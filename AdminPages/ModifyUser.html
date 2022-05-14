@@ -25,6 +25,7 @@
             font-family: "Montserrat", sans-serif
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -49,7 +50,11 @@
             <h3 class="updateTitle">Change a user's details</h3>
 
             <label for="profile_id">User ID</label>
-            <input type="text" name="profile_id" placeholder="User's ID">
+            <input type="text" name="profile_id" placeholder="User's ID" id="profile_id">
+
+            <button name="deleteUser" id="deleteUser" style="color: black;" type="button">Delete user</button>
+
+            <p id="confirmMessage" style="color: black"></p>
 
             <label for="user_attribute">Attribute (dropdown)</label>
             <select name="user_attribute" id="user-attribute">
@@ -73,6 +78,23 @@
             <input type="submit" id="submit" value="Update information">
           </form>
         </div>
+
+        <script>
+            $("#deleteUser").click(() => {
+                let profile_id = $("#profile_id").val()
+                $.post("/api/admin/deleteUser", {"profile_id" : profile_id}, (data, status) => {
+                    console.log(status);
+                    console.log(data)
+                    if (status = 'success') {
+                        if (data.length > 0) {
+                            $("#confirmMessage").text("User deleted")
+                        } else {
+                            $("#confirmMessage").text("User not found")
+                        }
+                    }
+                })
+            })
+        </script>
 
         <!--Form to change that user's details
         <div id="changeDetails">

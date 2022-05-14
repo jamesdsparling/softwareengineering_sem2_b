@@ -555,6 +555,30 @@ app.post("/api/admin/updateUserDetails", (req, res) => {
     }
 });
 
+app.post("/api/admin/deleteUser", (req, res) => {
+    if (req.session.admin == true) {
+        if (req.body.profile_id) {
+            client.query(
+                "DELETE FROM profiles WHERE profile_id = $1 RETURNING *",
+                [req.body.profile_id],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err.stack);
+                    } else {
+                        if (dbRes.rowCount > 0) {
+                            console.log("Deleted user");
+                            console.log(dbRes.rows);
+                        }
+                        res.send(dbRes.rows);
+                    }
+                }
+            );
+        }
+    } else {
+        res.redirect("signin.html");
+    }
+});
+
 app.post("/api/admin/updateTicketStatus", (req, res) => {
     if (req.session.admin == true) {
         if ((req.body.ticket_id, req.body.is_accepted)) {
