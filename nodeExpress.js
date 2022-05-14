@@ -527,6 +527,34 @@ app.post("/api/me/updateCard", (req, res) => {
     }
 });
 
+app.post("/api/admin/updateUserDetails", (req, res) => {
+    if (req.session.admin == true) {
+        if (
+            (req.body.profile_id, req.body.user_attribute, req.body.new_value)
+        ) {
+            client.query(
+                "UPDATE profiles SET " +
+                    req.body.user_attribute +
+                    " = $1 WHERE profile_id = $2 RETURNING *",
+                [req.body.new_value, req.body.profile_id],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("Admin updated user details");
+                        console.log(dbRes.rows[0]);
+                        res.send(
+                            'User details updated succesfully! <br> <a href="/modifyuser"><- go back</a>'
+                        );
+                    }
+                }
+            );
+        }
+    } else {
+        res.redirect("signin.html");
+    }
+});
+
 app.post("/api/admin/updateTicketStatus", (req, res) => {
     if (req.session.admin == true) {
         if ((req.body.ticket_id, req.body.is_accepted)) {

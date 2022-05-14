@@ -45,25 +45,25 @@
 
         <!--Find user who's details admin wants to change-->
         <div id="selectUser">
-          <form class="update" id="selectUser" method="POST" action="/api/me/updateInfo">
+          <form class="update" id="selectUser" method="POST" action="/api/admin/updateUserDetails">
             <h3 class="updateTitle">Change a user's details</h3>
 
-            <label for="userID">User ID</label>
-            <input type="text" name="userID" placeholder="User's ID">
+            <label for="profile_id">User ID</label>
+            <input type="text" name="profile_id" placeholder="User's ID">
 
-            <label for="user-attribute">Attribute (dropdown)</label>
-            <select name="user-attribute" id="user-attribute">
+            <label for="user_attribute">Attribute (dropdown)</label>
+            <select name="user_attribute" id="user-attribute">
               <option value="email">E-mail</option>
               <option value="pass">Password</option>
               <option value="balance">Balance</option>
-              <option value="registration-plate">Number Plate</option>
-              <option value="card-num">Card Number</option>
-              <option value="card-name">Card Name</option>
-              <option value="card-cvv">CVV</option>
+              <option value="registration_plate">Number Plate</option>
+              <option value="card_num">Card Number</option>
+              <option value="card_name">Card Name</option>
+              <option value="card_cvv">CVV</option>
             </select>
 
-            <label for="new-value">Updated information</label>
-            <input type="text" name="new-value" placeholder="Information you'd like to change" required="">
+            <label for="new_value">Updated information</label>
+            <input type="text" name="new_value" placeholder="Information you'd like to change" required="">
             
             <!--
             <label for="email">User's email</label>
