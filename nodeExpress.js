@@ -178,6 +178,18 @@ presentWithAccess(
     "/UserPages/UserView.html",
     "/AdminPages/ModifyUser.html"
 );
+presentWithAccess(
+    "/changeBooking",
+    "signin.html",
+    "signin.html",
+    "/AdminPages/AdminChangeBooking.html"
+);
+presentWithAccess(
+    "/reserve",
+    "signin.html",
+    "signin.html",
+    "/AdminPages/AdminReservation.html"
+);
 
 app.post("/api/auth/signin", (req, res) => {
     // Ensure input fields not empty
