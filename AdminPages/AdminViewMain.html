@@ -37,6 +37,20 @@
             .reserve {
                 background-color: #2196f3;
             }
+            
+            #total_count,
+            #available_count,
+            #occupied_count,
+            #reserved_count
+            {
+    display: inline-block;
+}
+
+p
+{
+  margin:0;
+  padding:0;
+}
         </style>
     </head>
 
@@ -85,8 +99,8 @@
 
             <h1 style="font-size: 60px">PARKING LOT 1</h1>
 
-            <div class="live">
-                <h>Live Metrics</h>
+             <div class="live">
+                <h style="font-size:30px">Live Metrics</h><br>
                 <p style="display: inline">Total Spaces (in database): <p id="total_count"></p></p>
                 <p style="display: inline">Available spaces: <p id="available_count"></p></p>
                 <p style="display: inline">Occupied spaces: <p id="occupied_count"></p></p>
