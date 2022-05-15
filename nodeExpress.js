@@ -596,7 +596,7 @@ app.post("/api/me/addBalance", (req, res) => {
                 );
             } else {
                 res.send(
-                    'Do not enter a negative number. idiot <br> <a href="/addbalance"><- go back</a>'
+                    'Enter a positive number. <br> <a href="/addbalance"><- go back</a>'
                 );
             }
         }
@@ -773,6 +773,12 @@ app.post("/api/getStatus", (req, res) => {
         }
     } else {
         res.redirect("/signin.html");
+    }
+});
+
+app.post("/api/admin/getStats", (req, res) => {
+    if (req.session.admin == true) {
+        // return
     }
 });
 

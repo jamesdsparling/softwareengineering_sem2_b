@@ -25,6 +25,7 @@
             font-family: "Montserrat", sans-serif
         }
     </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -73,9 +74,10 @@
                 data: {
                     requestType: 'fetchall'
                 },
-                success: function(response) {
+                success: function(data, response) {
+                    console.log(data)
                     console.log(response)
-                    createRows(response);
+                    createRows(data);
                 }
             });
         });
