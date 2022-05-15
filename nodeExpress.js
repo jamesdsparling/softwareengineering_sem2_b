@@ -12,6 +12,7 @@ const app = express();
 const port = 3000;
 
 var nodemailer = require("nodemailer");
+const { allowedNodeEnvironmentFlags } = require("process");
 
 // pass.txt should be in root directory containing ONLY 1 LINE with the password for postgres
 const dbPass = fs.readFileSync("pass.txt");
@@ -307,9 +308,20 @@ app.post("/api/auth/signup", (req, res) => {
                             }
                         );
 
+                        req.session.loggedin = true;
+                        req.session.email = dbRes.rows[0].email;
+                        req.session.profile_id = dbRes.rows[0].profile_id;
+
+                        if (dbRes.rows[0].profile_id == 1) {
+                            console.log("Signed in as admin user");
+                            req.session.admin = true;
+                        } else {
+                            req.session.admin = false;
+                        }
+
                         // Temporary solution. User is still created even if continue is not pressed.
                         res.send(
-                            'By clicking continue you agree to accept our <a href="/privacy.html">privacy permissions</a> <br> <a href="/">Continue...</a>'
+                            'By clicking continue you agree to accept our <a href="/privacy.html">privacy permissions</a> <br> <a href="/dashboard">Continue...</a>'
                         );
                     }
                 }
@@ -320,6 +332,12 @@ app.post("/api/auth/signup", (req, res) => {
                 'Passwords do not match! <br> <a href="/signup.html"><- go back</a>'
             );
         }
+    }
+});
+
+app.post("/api/auth/pwRecover", (req, res) => {
+    if (req.body.email) {
+        client.query("SELECT email");
     }
 });
 
@@ -440,7 +458,7 @@ app.post("/api/createTicket", (req, res) => {
                                                         let booking =
                                                             dbRes.rows[0];
                                                         client.query(
-                                                            "UPDATE profiles SET balance = balance - $1 WHERE profile_id = $2",
+                                                            "UPDATE profiles SET balance = balance - $1 WHERE profile_id = $2 RETURNING *",
                                                             [
                                                                 price,
                                                                 req.session
@@ -458,6 +476,50 @@ app.post("/api/createTicket", (req, res) => {
                                                                     console.log(
                                                                         booking
                                                                     );
+
+                                                                    var mailOptions =
+                                                                        {
+                                                                            from: "james.sparling.test.email@gmail.com",
+                                                                            to: req
+                                                                                .session
+                                                                                .email,
+                                                                            subject:
+                                                                                "New ticket booked",
+                                                                            text:
+                                                                                "You have created a new ticket!" +
+                                                                                (booking.is_accepted ==
+                                                                                true
+                                                                                    ? "Your ticket was approved automatically."
+                                                                                    : "Please wait for an admin to approve your ticket.") +
+                                                                                "Ticket ID: " +
+                                                                                booking.ticket_id,
+                                                                        };
+
+                                                                    console.log(
+                                                                        mailOptions
+                                                                    );
+
+                                                                    transporter.sendMail(
+                                                                        mailOptions,
+                                                                        function (
+                                                                            error,
+                                                                            info
+                                                                        ) {
+                                                                            if (
+                                                                                error
+                                                                            ) {
+                                                                                console.log(
+                                                                                    error
+                                                                                );
+                                                                            } else {
+                                                                                console.log(
+                                                                                    "Email sent: " +
+                                                                                        info.response
+                                                                                );
+                                                                            }
+                                                                        }
+                                                                    );
+
                                                                     res.send(
                                                                         'Ticket booked successfully!! <br> <a href="/dashboard"><- go back</a>'
                                                                     );
@@ -758,6 +820,38 @@ app.post("/api/admin/updateTicketStatus", (req, res) => {
                             console.log("Ticket status updated");
                             console.log(dbRes.rows[0]);
                             res.redirect("/dashboard");
+
+                            let spaceID = dbRes.rows[0].space_id;
+                            client.query(
+                                "SELECT email FROM profiles WHERE profile_id = $1",
+                                [dbRes.rows[0].profile_id],
+                                (err, dbRes) => {
+                                    var mailOptions = {
+                                        from: "james.sparling.test.email@gmail.com",
+                                        to: dbRes.rows[0].email,
+                                        subject: "Parking ticket approved",
+                                        text:
+                                            "Your ticket has been approved by the administrator! Space ID: " +
+                                            spaceID,
+                                    };
+
+                                    console.log(mailOptions);
+
+                                    transporter.sendMail(
+                                        mailOptions,
+                                        function (error, info) {
+                                            if (error) {
+                                                console.log(error);
+                                            } else {
+                                                console.log(
+                                                    "Email sent: " +
+                                                        info.response
+                                                );
+                                            }
+                                        }
+                                    );
+                                }
+                            );
                         }
                     }
                 );
@@ -769,9 +863,39 @@ app.post("/api/admin/updateTicketStatus", (req, res) => {
                         if (err) {
                             console.log(err.stack);
                         } else {
-                            console.log("ticket status updated");
+                            console.log("Ticket deleted");
                             console.log(dbRes.rows[0]);
+
                             res.redirect("/dashboard");
+
+                            client.query(
+                                "SELECT email FROM profiles WHERE profile_id = $1",
+                                [dbRes.rows[0].profile_id],
+                                (err, dbRes) => {
+                                    var mailOptions = {
+                                        from: "james.sparling.test.email@gmail.com",
+                                        to: dbRes.rows[0].email,
+                                        subject: "Parking ticket deleted",
+                                        text: "Sorry your ticket was deleted by the administrator. Please contact them using the messages section to find out more. Ticket ID: ",
+                                    };
+
+                                    console.log(mailOptions);
+
+                                    transporter.sendMail(
+                                        mailOptions,
+                                        function (error, info) {
+                                            if (error) {
+                                                console.log(error);
+                                            } else {
+                                                console.log(
+                                                    "Email sent: " +
+                                                        info.response
+                                                );
+                                            }
+                                        }
+                                    );
+                                }
+                            );
                         }
                     }
                 );
@@ -852,7 +976,7 @@ app.post("/api/me/profiles", (req, res) => {
 app.post("/api/admin/tickets", (req, res) => {
     if (req.session.admin == true) {
         client.query(
-            "SELECT ticket_id, requested_time, stay_hours, is_accepted, space_id FROM tickets",
+            "SELECT ticket_id, requested_time, stay_hours, is_accepted, space_id, profile_id FROM tickets ORDER BY ticket_id",
             (err, dbRes) => {
                 if (err) {
                     console.log(err.stack);
