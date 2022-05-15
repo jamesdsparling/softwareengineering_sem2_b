@@ -778,7 +778,38 @@ app.post("/api/getStatus", (req, res) => {
 
 app.post("/api/admin/getStats", (req, res) => {
     if (req.session.admin == true) {
-        // return
+        client.query("SELECT space_id FROM parking_spaces", (err, dbRes) => {
+            if (err) {
+                console.log(err);
+            } else {
+                let spacesCount = dbRes.rowCount;
+                client.query(
+                    "SELECT ticket_id, space_id, requested_time, end_time FROM tickets",
+                    (err, dbRes) => {
+                        var spacesBooked = 0;
+                        let currentDate = new Date();
+                        dbRes.rows.forEach((ticket) => {
+                            let startDate = new Date(ticket.requested_time);
+                            let endDate = new Date(ticket.end_time);
+                            if (
+                                startDate < currentDate &&
+                                endDate > currentDate
+                            ) {
+                                spacesBooked++;
+                            }
+                        });
+                        let output = {
+                            total_count: spacesCount,
+                            available_count: spacesCount - spacesBooked,
+                            occupied_count: spacesBooked,
+                            reserved_count: 0,
+                        };
+                        console.log(output);
+                        res.send(output);
+                    }
+                );
+            }
+        });
     }
 });
 

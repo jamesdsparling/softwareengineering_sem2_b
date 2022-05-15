@@ -87,10 +87,10 @@
 
             <div class="live">
                 <h>Live Metrics</h>
-                <p>Total Spaces (in database): 5</p>
-                <p>Available spaces: <p class="availableCount"></p></p>
-                <p>Occupied spaces: <p class="occupiedCount"></p></p>
-                <p>Reserved spaces: <p class="reservedCount"></p></p>
+                <p style="display: inline">Total Spaces (in database): <p id="total_count"></p></p>
+                <p style="display: inline">Available spaces: <p id="available_count"></p></p>
+                <p style="display: inline">Occupied spaces: <p id="occupied_count"></p></p>
+                <p style="display: inline">Reserved spaces: <p id="reserved_count"></p></p>
             </div>
 
             <div class="mark1-txt hide">
@@ -1356,10 +1356,14 @@
 
                 function updateLiveStats() {
                     $.post("/api/admin/getStats", (data, response) => {
+                        console.log(data)
+                        console.log(response)
                         if (response == 'success') {
-                            $("#availableCount").text(data.available_count)
-                            $("#occupiedCount").text(5 - data.available_count)
-                            $("#reservedCount").text(data.reserved_count1)
+                            console.log(data.available_count)
+                            $("#total_count").text(data.total_count)
+                            $("#available_count").text(String(data.available_count))
+                            $("#occupied_count").text(String(data.occupied_count))
+                            $("#reserved_count").text((data.reserved_count))
                         }
                     })
                 }
