@@ -182,7 +182,7 @@ presentWithAccess(
     "/reserve",
     "signin.html",
     "signin.html",
-    "/AdminPages/AdminReservation.html"
+    "/UserPages/UserView.html"
 );
 
 app.post("/api/auth/signin", (req, res) => {
@@ -325,8 +325,11 @@ app.post("/api/createTicket", (req, res) => {
             req.body.hours,
             req.body.space_id)
         ) {
-            let space_id = req.body.space_id - 1;
-            let price = calculatePrice(parseInt(req.body.hours));
+            let space_id = req.body.space_id; // - 1;
+            let price =
+                req.session.admin == true
+                    ? 0
+                    : calculatePrice(parseInt(req.body.hours));
             // client.query("SELECT balance FROM profile WHERE profile_id = $1", [req.session.profile_id], (err, dbRes) => {
             //         if (err) {
             //             console.log(err.stack);
@@ -363,7 +366,11 @@ app.post("/api/createTicket", (req, res) => {
                                             );
                                         } else {
                                             client.query(
-                                                "INSERT INTO tickets(profile_id, space_id, requested_time, stay_hours) VALUES ($1, $2, $3, $4) RETURNING *",
+                                                "INSERT INTO tickets(profile_id, space_id, requested_time, stay_hours, is_accepted) VALUES ($1, $2, $3, $4, " +
+                                                    (req.session.admin == true
+                                                        ? "true"
+                                                        : "(SELECT is_auto_accept FROM parking_spaces WHERE space_id = $2)") +
+                                                    ") RETURNING *",
                                                 [
                                                     req.session.profile_id,
                                                     space_id,
