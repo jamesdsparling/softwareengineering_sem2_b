@@ -173,10 +173,10 @@ presentWithAccess(
     "/AdminPages/ModifyUser.html"
 );
 presentWithAccess(
-    "/changeBooking",
+    "/modifyticket",
     "signin.html",
     "signin.html",
-    "/AdminPages/AdminChangeBooking.html"
+    "/AdminPages/ModifyTicket.html"
 );
 presentWithAccess(
     "/reserve",
@@ -331,7 +331,7 @@ app.post("/api/createTicket", (req, res) => {
             req.body.hours,
             req.body.space_id)
         ) {
-            let space_id = req.body.space_id; // - 1;
+            let space_id = req.body.space_id - 1;
             let price =
                 req.session.admin == true
                     ? 0
@@ -701,6 +701,9 @@ app.post("/api/admin/updateUserDetails", (req, res) => {
                 (err, dbRes) => {
                     if (err) {
                         console.log(err);
+                        res.send(
+                            'There was a problem updating the user details. Please check the new details are valid. <br> <a href="/modifyuser"><- go back</a>'
+                        );
                     } else {
                         console.log("Admin updated user details");
                         console.log(dbRes.rows[0]);
@@ -774,6 +777,43 @@ app.post("/api/admin/updateTicketStatus", (req, res) => {
                 );
             }
         }
+    }
+});
+
+app.post("/api/admin/updateTicketDetails", (req, res) => {
+    if (req.session.admin == true) {
+        if (
+            (req.body.ticket_id, req.body.ticet_attribute, req.body.new_value)
+        ) {
+            client.query(
+                "UPDATE tickets SET " +
+                    req.body.ticket_attribute +
+                    " = $1 WHERE ticket_id = $2 RETURNING *",
+                [req.body.new_value, req.body.ticket_id],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err);
+                        res.send(
+                            'There was a problem updating the ticket. Please check the new details are valid. <br> <a href="/modifyticket"><- go back</a>'
+                        );
+                    } else {
+                        if (dbRes.rowCount > 0) {
+                            console.log("Admin updated user details");
+                            console.log(dbRes.rows[0]);
+                            res.send(
+                                'User details updated succesfully! <br> <a href="/modifyticket"><- go back</a>'
+                            );
+                        } else {
+                            res.send(
+                                'No ticket found with that id. <br> <a href="/modifyticket"><- go back</a>'
+                            );
+                        }
+                    }
+                }
+            );
+        }
+    } else {
+        res.redirect("signin.html");
     }
 });
 
@@ -1010,7 +1050,51 @@ app.post("/api/admin/updateProfile", (req, res) => {
 });
 
 app.post("/api/auth/gpscheck", (req, res) => {
-    console.log("I DON'T KNOW WHAT I'M DOING");
+    if (req.session.admin == true) {
+        if (
+            (req.body.userID,
+            req.body.timestamp,
+            req.body.xcoord,
+            req.body.ycoord)
+        ) {
+            client.query(
+                "select gps_status($1, $2, $3, $4)",
+                [
+                    req.body.userID,
+                    req.body.timestamp,
+                    req.body.xcoord,
+                    req.body.ycoord,
+                ],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err.stack);
+                    } else {
+                        switch (dbRes.rows[0].gps_status) {
+                            case 0:
+                                res.send(
+                                    'The selected user does not have a ticket. <a href="/gps"><- go back</a>'
+                                );
+                                break;
+                            case 1:
+                                res.send(
+                                    'The user has a ticket and is in the correct space. <a href="/gps"><- go back</a>'
+                                );
+                                break;
+                            case 2:
+                                res.send(
+                                    'The user has a ticket and is in the wrong space. <a href="/gps"><- go back</a>'
+                                );
+                                break;
+                            case 3:
+                                res.send(
+                                    'The users ticket has expired but they are still in their space. <a href="/gps"><- go back</a>'
+                                );
+                        }
+                    }
+                }
+            );
+        }
+    }
 });
 
 function updateProfile(profile_id, field, value) {

@@ -43,4 +43,4 @@ end; $$
 language plpgsql
 
 --Test the function--
-select "gps_status"(cast(3 as int), cast(current_timestamp as timestamp), cast(1.0 as float), cast(1.0 as float));
+select gps_status(cast(3 as int), cast(current_timestamp as timestamp), cast(1.0 as float), cast(1.0 as float));

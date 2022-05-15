@@ -52,15 +52,15 @@
           <form class="second_form" id="modify-ticket" method="POST" action="/api/admin/updateTicketDetails">
             <h3 class="updateTitle">Change a ticket's details</h3>
 
-            <label for="ticket_id">User ID</label>
+            <label for="ticket_id">Ticket ID</label>
             <input type="text" name="ticket_id" placeholder="Ticket's ID" id="ticket_id">
 
             <button name="deleteTicket" id="deleteTicket" style="color: black;" type="button">Delete this ticket</button>
 
             <p id="confirmMessage" style="color: black"></p>
 
-            <label for="ticket-attribute">Attribute (dropdown)</label>
-            <select name="ticket-attribute" id="ticket-attribute">
+            <label for="ticket_attribute">Attribute (dropdown)</label>
+            <select name="ticket_attribute" id="ticket-attribute">
               <option value="profile_id">Profile ID</option>
               <option value="space_id">Space ID</option>
               <option value="requested_time">Requested Time</option>

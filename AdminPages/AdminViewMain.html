@@ -114,7 +114,7 @@ p
                 <p>Booked from:<p id="booked_from"></p></p>
                 <p>Booked until:<p id="booked_to"></p></p>
                 <a href="/messages" class="links"> Messsage User</a>
-                <a href="/changeBooking" class="links"> Change booking</a>
+                <a href="/modifyticket" class="links"> Change booking</a>
                 <button class="links" onclick="getConfirmation()">
                     Cancel Booking
                 </button>
@@ -1397,31 +1397,31 @@ p
                         $(".hide").hide();
                         $(".mark1-txt").fadeIn(300);
                         $("#spaceID").text("1")
-                        getStatus(1)
+                        getStatus(0)
                     });
                     $("#spaceid2").click(function () {
                         $(".hide").hide();
                         $(".mark1-txt").fadeIn(300);
                         $("#spaceID").text("2")
-                        getStatus(2)
+                        getStatus(1)
                     });
                     $("#spaceid3").click(function () {
                         $(".hide").hide();
                         $(".mark1-txt").fadeIn(300);
                         $("#spaceID").text("3")
-                        getStatus(3)
+                        getStatus(2)
                     });
                     $("#spaceid4").click(function () {
                         $(".hide").hide();
                         $(".mark1-txt").fadeIn(300);
                         $("#spaceID").text("4")
-                        getStatus(4)
+                        getStatus(3)
                     });
                     $("#spaceid5").click(function () {
                         $(".hide").hide();
                         $(".mark1-txt").fadeIn(300);
                         $("#spaceID").text("5")
-                        getStatus(5)
+                        getStatus(4)
                     })
                     // $("#spaceid6").click(function () {
                     //     $(".hide").hide();
