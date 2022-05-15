@@ -94,7 +94,7 @@
                         var stay_hours = response[i].stay_hours;
                         var id = response[i].ticket_id
                         var is_accepted = response[i].is_accepted;
-                        var space_id = response[i].space_id
+                        var space_id = response[i].space_id + 1
 
                         var tr_str = "<tr class='" + ((is_accepted == true) ? "accepted" : "not_accepted") + "'>" +
                             // var tr_str = "<tr>" +
