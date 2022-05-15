@@ -4,7 +4,7 @@
         <title>User Dashboard</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="stylesheet4.css" />
+        <link rel="stylesheet" href="stylesheet3.css" />
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Lato"
@@ -29,12 +29,12 @@
                 ></a>
                 <a
                     href="/dashboard"
-                    class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
+                    class="w3-bar-item w3-button w3-padding-large w3-white"
                     >Dashboard</a
                 >
                 <a
                     href="/tickets"
-                    class="w3-bar-item w3-button w3-padding-large w3-white"
+                    class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
                     >Manage Tickets</a
                 >
                 <a
@@ -61,7 +61,7 @@
             <div class="Booking">
                 <form method="POST" action="/api/createTicket" id="bookingform">
                     <h2>Book Parking Space</h2>
-                    
+
                         <label for="carpark">Choose a carpark:</label>
             <select id="carpark" name="carpark">
             <option value="Main">Parking lot 1</option>
@@ -71,13 +71,8 @@
                     <!-- <label>Date:</label>
                 <input name="somedate" type="date" required> -->
 
-                    <label for="appt">Select a date and time:</label>
-                    <input
-                        type="datetime-local"
-                        id="appt"
-                        name="appt"
-                        required
-                    />
+                <label for="appt">Select a date and time:</label>
+                <input type="datetime-local" class="form-control col-md-6" id="appt" name="appt" required>
 
                     <label for="Hours">Booking length </label>
 
@@ -867,10 +862,10 @@
                     })(i);
                 }
 
-                var today = new Date().toISOString().split("T")[0];
-                document
-                    .getElementsByName("appt")[0]
-                    .setAttribute("min", today);
+                var today = new Date().toISOString().slice(0, 16);
+
+                document.getElementsByName("appt")[0].min = today;
+
 
                 $("#checkAvailable").click(function () {
                 console.log("checking available spaces")
