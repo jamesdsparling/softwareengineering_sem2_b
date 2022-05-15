@@ -910,6 +910,10 @@ app.post("/api/admin/updateProfile", (req, res) => {
     }
 });
 
+app.post("/api/auth/gpscheck", (req, res) => {
+    console.log("I DON'T KNOW WHAT I'M DOING")
+});
+
 function updateProfile(profile_id, field, value) {
     client.query(
         "UPDATE profiles SET $1 = $2 WHERE profile_id = $2 RETURNING *",

@@ -43,16 +43,16 @@
     </header>
 
     <div class="log-in">
-        <form method="POST" action="/api/auth/gps-check">
+        <form method="POST" action="/api/auth/gpscheck">
             <h2>Check a user's status</h2>
             <label for="userID">User ID</label>
             <input type="number" name="userID" placeholder="User-ID" required="">
 
-            <label for="x-coord">X coordinate</label>
-            <input type="number" name="x-coord" placeholder="x" step="0.01" required="">
+            <label for="xcoord">X coordinate</label>
+            <input type="number" name="xcoord" placeholder="x" step="0.01" required="">
 
-            <label for="y-coord">Y coordinate</label>
-            <input type="number" name="y-coord" placeholder="y" step="0.01" required="">
+            <label for="ycoord">Y coordinate</label>
+            <input type="number" name="ycoord" placeholder="y" step="0.01" required="">
 
             <label for="time">Test time</label>
             <input type="datetime-local" id="time" required="">
