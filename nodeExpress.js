@@ -318,111 +318,161 @@ app.post("/api/auth/signup", (req, res) => {
 });
 
 app.post("/api/createTicket", (req, res) => {
-    if (
-        (req.session.profile_id,
-        req.body.appt,
-        req.body.hours,
-        req.body.space_id)
-    ) {
-        let space_id = req.body.space_id - 1;
-        let price = calculatePrice(parseInt(req.body.hours));
-        // client.query("SELECT balance FROM profile WHERE profile_id = $1", [req.session.profile_id], (err, dbRes) => {
-        //         if (err) {
-        //             console.log(err.stack);
-        //         } else {
-        //             if (dbRes.rows[0].balance >= price) {
-
-        client.query(
-            "SELECT balance FROM profiles WHERE profile_id = $1",
-            [req.session.profile_id],
-            (err, dbRes) => {
-                if (err) {
-                    console.log(err.stack);
-                } else {
-                    if (dbRes.rows[0].balance < price) {
-                        console.log("Error: user too broke");
-                        res.send(
-                            "Balance not sufficient. Please add £" +
-                                String((price - dbRes.rows[0].balance) / 100) +
-                                ' to your account. <br> <a href="/dashboard"><- go back</a>'
-                        );
+    if (req.session.loggedin) {
+        if (
+            (req.session.profile_id,
+            req.body.appt,
+            req.body.hours,
+            req.body.space_id)
+        ) {
+            let space_id = req.body.space_id - 1;
+            let price = calculatePrice(parseInt(req.body.hours));
+            // client.query("SELECT balance FROM profile WHERE profile_id = $1", [req.session.profile_id], (err, dbRes) => {
+            //         if (err) {
+            //             console.log(err.stack);
+            //         } else {
+            //             if (dbRes.rows[0].balance >= price) {
+            client.query(
+                "SELECT balance FROM profiles WHERE profile_id = $1",
+                [req.session.profile_id],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err.stack);
                     } else {
-                        client.query(
-                            "INSERT INTO tickets(profile_id, space_id, requested_time, stay_hours) VALUES ($1, $2, $3, $4) RETURNING *",
-                            [
-                                req.session.profile_id,
-                                space_id,
-                                req.body.appt,
-                                req.body.hours,
-                            ],
-                            (err, dbRes) => {
-                                if (err) {
-                                    if (
-                                        err.constraint ==
-                                        "tickets_int4range_tsrange_excl"
-                                    ) {
-                                        console.log("Booking conflict");
-
-                                        let appt_date = new Date(req.body.appt);
-                                        let appt_end = new Date(
-                                            appt_date.getTime() +
-                                                req.body.hours * 60 * 60 * 1000
-                                        );
-
-                                        getAvailableSpaces(
-                                            appt_date,
-                                            appt_end,
-                                            (freeSpaces) => {
-                                                let displaySpces =
-                                                    freeSpaces.map((space) => {
-                                                        return space + 1;
-                                                    });
-                                                res.send(
-                                                    "Sorry, this space is already booked in this time. <br> The following spaces are available at this time though: " +
-                                                        displaySpaces.toString() +
-                                                        '<br> <a href="/dashboard"><- go back</a>'
-                                                );
-                                            }
-                                        );
-                                    } else {
+                        if (dbRes.rows[0].balance < price) {
+                            console.log("Error: user too broke");
+                            res.send(
+                                "Balance not sufficient. Please add £" +
+                                    String(
+                                        (price - dbRes.rows[0].balance) / 100
+                                    ) +
+                                    ' to your account. <br> <a href="/dashboard"><- go back</a>'
+                            );
+                        } else {
+                            client.query(
+                                "SELECT is_blocked FROM parking_spaces WHERE space_id = $1",
+                                [space_id],
+                                (err, dbRes) => {
+                                    if (err) {
                                         console.log(err.stack);
-                                    }
-                                } else {
-                                    let booking = dbRes.rows[0];
-                                    client.query(
-                                        "UPDATE profiles SET balance = balance - $1 WHERE profile_id = $2",
-                                        [price, req.session.profile_id],
-                                        (err, dbRes) => {
-                                            if (err) {
-                                                console.log(err.stack);
-                                            } else {
-                                                console.log(
-                                                    "New ticket booked"
-                                                );
-                                                console.log(booking);
-                                                res.send(
-                                                    'Ticket booked successfully!! <br> <a href="/dashboard"><- go back</a>'
-                                                );
-                                            }
+                                    } else {
+                                        if (dbRes.rows[0].is_blocked == true) {
+                                            console.log("Space blocked");
+                                            res.send(
+                                                'Sorry, this space is not available at this time. <br> <a href="/dashboard"><- go back</a>'
+                                            );
+                                        } else {
+                                            client.query(
+                                                "INSERT INTO tickets(profile_id, space_id, requested_time, stay_hours) VALUES ($1, $2, $3, $4) RETURNING *",
+                                                [
+                                                    req.session.profile_id,
+                                                    space_id,
+                                                    req.body.appt,
+                                                    req.body.hours,
+                                                ],
+                                                (err, dbRes) => {
+                                                    if (err) {
+                                                        if (
+                                                            err.constraint ==
+                                                            "tickets_int4range_tsrange_excl"
+                                                        ) {
+                                                            console.log(
+                                                                "Booking conflict"
+                                                            );
+
+                                                            let appt_date =
+                                                                new Date(
+                                                                    req.body.appt
+                                                                );
+                                                            let appt_end =
+                                                                new Date(
+                                                                    appt_date.getTime() +
+                                                                        req.body
+                                                                            .hours *
+                                                                            60 *
+                                                                            60 *
+                                                                            1000
+                                                                );
+
+                                                            getAvailableSpaces(
+                                                                appt_date,
+                                                                appt_end,
+                                                                (
+                                                                    freeSpaces
+                                                                ) => {
+                                                                    let displaySpaces =
+                                                                        freeSpaces.map(
+                                                                            (
+                                                                                space
+                                                                            ) => {
+                                                                                return (
+                                                                                    space +
+                                                                                    1
+                                                                                );
+                                                                            }
+                                                                        );
+                                                                    res.send(
+                                                                        "Sorry, this space is already booked in this time. <br> The following spaces are available at this time though: " +
+                                                                            displaySpaces.toString() +
+                                                                            '<br> <a href="/dashboard"><- go back</a>'
+                                                                    );
+                                                                }
+                                                            );
+                                                        } else {
+                                                            console.log(
+                                                                err.stack
+                                                            );
+                                                        }
+                                                    } else {
+                                                        let booking =
+                                                            dbRes.rows[0];
+                                                        client.query(
+                                                            "UPDATE profiles SET balance = balance - $1 WHERE profile_id = $2",
+                                                            [
+                                                                price,
+                                                                req.session
+                                                                    .profile_id,
+                                                            ],
+                                                            (err, dbRes) => {
+                                                                if (err) {
+                                                                    console.log(
+                                                                        err.stack
+                                                                    );
+                                                                } else {
+                                                                    console.log(
+                                                                        "New ticket booked"
+                                                                    );
+                                                                    console.log(
+                                                                        booking
+                                                                    );
+                                                                    res.send(
+                                                                        'Ticket booked successfully!! <br> <a href="/dashboard"><- go back</a>'
+                                                                    );
+                                                                }
+                                                            }
+                                                        );
+                                                    }
+                                                }
+                                            );
                                         }
-                                    );
+                                    }
                                 }
-                            }
-                        );
+                            );
+                        }
                     }
                 }
-            }
-        );
+            );
 
-        //         } else {
-        //             console.log("Fatal error: user too broke");
-        //         }
-        //     }
-        // })
-    } else {
-        res.send(
-            'Please fill in all fields. <br> <a href="/dashboard"><- go back</a>'
-        );
+            //         } else {
+            //             console.log("Fatal error: user too broke");
+            //         }
+            //     }
+            // })
+        } else {
+            res.send(
+                'Please fill in all fields. <br> <a href="/dashboard"><- go back</a>'
+            );
+        }
     }
 });
 
@@ -947,7 +997,7 @@ app.post("/api/admin/updateProfile", (req, res) => {
 });
 
 app.post("/api/auth/gpscheck", (req, res) => {
-    console.log("I DON'T KNOW WHAT I'M DOING")
+    console.log("I DON'T KNOW WHAT I'M DOING");
 });
 
 function updateProfile(profile_id, field, value) {
