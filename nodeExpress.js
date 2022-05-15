@@ -336,8 +336,135 @@ app.post("/api/auth/signup", (req, res) => {
 });
 
 app.post("/api/auth/pwRecover", (req, res) => {
-    if (req.body.email) {
-        client.query("SELECT email");
+    if ((req.body.email, req.body.password, req.body.password2)) {
+        if (req.body.password2 == req.body.password) {
+            client.query(
+                "SELECT profile_id FROM profiles WHERE email = $1",
+                [req.body.email],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        if (dbRes.rowCount > 0) {
+                            let profileID = dbRes.rows[0].profile_id;
+                            let randomString = Math.random()
+                                .toString(36)
+                                .slice(2);
+                            client.query(
+                                "UPDATE profiles SET password_key = $1, new_pass = $2 WHERE profile_id = $3",
+                                [randomString, req.body.password, profileID],
+                                (err, dbRes) => {
+                                    if (err) {
+                                        console.log(err.stack);
+                                    } else {
+                                        let resetURL =
+                                            "http://localhost:3000/api/auth/resetPass?key=" +
+                                            randomString +
+                                            "&profile=" +
+                                            profileID;
+
+                                        var mailOptions = {
+                                            from: "james.sparling.test.email@gmail.com",
+                                            to: req.body.email,
+                                            subject: "Password reset",
+                                            text:
+                                                "Please visit the following link to verify your password " +
+                                                resetURL,
+                                        };
+
+                                        console.log(mailOptions);
+
+                                        transporter.sendMail(
+                                            mailOptions,
+                                            function (error, info) {
+                                                if (error) {
+                                                    console.log(error);
+                                                } else {
+                                                    console.log(
+                                                        "Email sent: " +
+                                                            info.response
+                                                    );
+                                                }
+                                            }
+                                        );
+
+                                        res.send(
+                                            "Please check your inbox for an email to reset your password."
+                                        );
+                                    }
+                                }
+                            );
+                        } else {
+                            res.send("No user with that email found.");
+                        }
+                    }
+                }
+            );
+        } else {
+            res.send(
+                'Passwords do not match. <br> <a href="/pwRecover><- go back</a>"'
+            );
+        }
+    }
+});
+
+app.get("/api/auth/resetPass", (req, res) => {
+    if ((req.query.key, req.query.profile)) {
+        client.query(
+            "SELECT password_key FROM profiles WHERE profile_id = $1",
+            [req.query.profile],
+            (err, dbRes) => {
+                if (err) {
+                    console.log(err.stack);
+                } else {
+                    if (dbRes.rowCount > 0) {
+                        if (req.query.key == dbRes.rows[0].password_key) {
+                            client.query(
+                                "UPDATE profiles SET pass = new_pass, new_pass = NULL, password_key = NULL WHERE profile_id = $1 RETURNING *",
+                                [req.query.profile],
+                                (err, dbRes) => {
+                                    if (err) {
+                                        console.log(err.stack);
+                                    } else {
+                                        console.log("Password updated");
+                                        res.send(
+                                            'Success! <a href="/signup.html">Log in</a>'
+                                        );
+
+                                        var mailOptions = {
+                                            from: "james.sparling.test.email@gmail.com",
+                                            to: dbRes.rows[0].email,
+                                            subject: "Password reset",
+                                            text: "Your password has been reset.",
+                                        };
+
+                                        console.log(mailOptions);
+
+                                        transporter.sendMail(
+                                            mailOptions,
+                                            function (error, info) {
+                                                if (error) {
+                                                    console.log(error);
+                                                } else {
+                                                    console.log(
+                                                        "Email sent: " +
+                                                            info.response
+                                                    );
+                                                }
+                                            }
+                                        );
+                                    }
+                                }
+                            );
+                        } else {
+                            res.send("Invalid key.");
+                        }
+                    } else {
+                        res.send("Invalid profile.");
+                    }
+                }
+            }
+        );
     }
 });
 
