@@ -16,10 +16,10 @@ begin
 	alter table temp_table ADD over_time timestamp;
 	update temp_table set over_time = requested_time + stay_hours * interval '1' hour + interval '1' hour;
 	
-	create temp table current_temp_table as select * from temp_table where current_timestamp > requested_time and current_timestamp < end_time;
+	create temp table current_temp_table as select * from temp_table where current_timestamp > requested_time and current_timestamp < over_time;
 	
 	create temp table joined_temp_table as 
-	select current_temp_table.end_time, parking_spaces.gps_x, parking_spaces.gps_y 
+	select current_temp_table.over_time, parking_spaces.gps_x, parking_spaces.gps_y 
 	from current_temp_table join parking_spaces 
 	on current_temp_table.space_id=parking_spaces.space_id;
 	
@@ -34,7 +34,7 @@ begin
 		return 2;
 	end if;
 	
-	if date_time > (select joined_temp_table.end_time from joined_temp_table limit 1) - interval '1' hour then
+	if date_time > (select joined_temp_table.over_time from joined_temp_table limit 1) - interval '1' hour then
 		return 3;
 	end if;
 	
