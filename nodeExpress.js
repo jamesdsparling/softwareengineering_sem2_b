@@ -184,6 +184,12 @@ presentWithAccess(
     "signin.html",
     "/UserPages/UserView.html"
 );
+presentWithAccess(
+    "/gps",
+    "signin.html",
+    "signin.html",
+    "/AdminPages/gps-checker.html"
+);
 
 app.post("/api/auth/signin", (req, res) => {
     // Ensure input fields not empty
