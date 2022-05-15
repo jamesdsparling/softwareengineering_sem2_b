@@ -12,7 +12,7 @@ begin
 	drop table if exists current_temp_table;
 	drop table if exists joined_temp_table;
 
-	create temp table temp_table as select * from tickets where profile_id = user_id;
+	create temp table temp_table as select * from tickets where profile_id = user_id and is_accepted = true;
 	alter table temp_table ADD over_time timestamp;
 	update temp_table set over_time = requested_time + stay_hours * interval '1' hour + interval '1' hour;
 	
