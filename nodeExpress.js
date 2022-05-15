@@ -379,7 +379,7 @@ app.post("/api/createTicket", (req, res) => {
                                                     });
                                                 res.send(
                                                     "Sorry, this space is already booked in this time. <br> The following spaces are available at this time though: " +
-                                                        displaySpces.toString() +
+                                                        displaySpaces.toString() +
                                                         '<br> <a href="/dashboard"><- go back</a>'
                                                 );
                                             }
@@ -490,6 +490,26 @@ app.post("/api/getAvailableSpaces", (req, res) => {
             console.log(freeSpaces);
             res.send(freeSpaces);
         });
+    }
+});
+
+app.post("/api/admin/toggleBlockSpace", (req, res) => {
+    if (req.session.admin == true) {
+        if (req.body.space_id) {
+            client.query(
+                "UPDATE parking_spaces SET is_blocked = NOT is_blocked WHERE space_id = $1 RETURNING *",
+                [req.body.space_id],
+                (err, dbRes) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("Space blocked / unblocked");
+                        console.log(dbRes.rows[0]);
+                        res.send(dbRes.rows[0].is_blocked);
+                    }
+                }
+            );
+        }
     }
 });
 
@@ -745,28 +765,44 @@ app.post("/api/getStatus", (req, res) => {
     if (req.session.loggedin) {
         if (req.body.space_id) {
             client.query(
-                "SELECT ticket_id, profile_id, requested_time, end_time from tickets WHERE space_id = $1",
+                "SELECT is_blocked from parking_spaces WHERE space_id = $1",
                 [req.body.space_id],
                 (err, dbRes) => {
                     if (err) {
                         console.log(err);
                     } else {
-                        let booked;
-                        dbRes.rows.forEach((row) => {
-                            let startDate = new Date(row.requested_time);
-                            let endDate = new Date(row.end_time);
-                            let currentTime = new Date();
-                            console.log(row);
-                            if (
-                                startDate < currentTime &&
-                                endDate > currentTime
-                            ) {
-                                console.log("Space booked");
-                                booked = row;
+                        let isBlocked = dbRes.rows[0].is_blocked;
+                        client.query(
+                            "SELECT ticket_id, profile_id, requested_time, end_time from tickets WHERE space_id = $1",
+                            [req.body.space_id],
+                            (err, dbRes) => {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    let ticket;
+                                    dbRes.rows.forEach((row) => {
+                                        let startDate = new Date(
+                                            row.requested_time
+                                        );
+                                        let endDate = new Date(row.end_time);
+                                        let currentTime = new Date();
+                                        console.log(row);
+                                        if (
+                                            startDate < currentTime &&
+                                            endDate > currentTime
+                                        ) {
+                                            console.log("Space booked");
+                                            ticket = row;
+                                        }
+                                    });
+                                    output = {
+                                        is_blocked: isBlocked,
+                                        ticket: ticket,
+                                    };
+                                    res.send(output);
+                                }
                             }
-                        });
-                        console.log("Space free");
-                        res.send(booked);
+                        );
                     }
                 }
             );
@@ -804,7 +840,7 @@ app.post("/api/admin/getStats", (req, res) => {
                             occupied_count: spacesBooked,
                             reserved_count: 0,
                         };
-                        console.log(output);
+                        // console.log(output);
                         res.send(output);
                     }
                 );

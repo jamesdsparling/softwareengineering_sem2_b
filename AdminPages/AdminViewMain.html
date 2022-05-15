@@ -1353,27 +1353,32 @@ p
             </svg>
 
             <script>
+                var currentSpace
                 function getStatus(space_id) {
+                    currentSpace = space_id
                     $.post("/api/getStatus", {"space_id" : space_id}, (data, response) => {
                         // console.log(data)
                         // console.log(response)
                         if (response == 'success') {
-                            let bookedFrom = new Date(data.requested_time)
-                            let bookedTo = new Date(data.end_time)
-                            $("#status").text((data) ? "Occupied" : "Free");
-                            $("#user_id").text(data.profile_id || "")
-                            $("#booked_from").text(bookedFrom.toLocaleString() || "")
-                            $("#booked_to").text(bookedTo.toLocaleString() || "")
+                            var bookedFrom, bookedTo, profileID;
+                            if (data.ticket) {
+                                bookedFrom = new Date(data.ticket.requested_time)
+                                bookedTo = new Date(data.ticket.end_time)
+                                profileID = data.ticket.profile_id
+                            }
+                            $("#status").text((data.is_blocked == true) ? "Blocked" : ((data.ticket) ? "Occupied" : "Free"));
+                            $("#user_id").text(profileID || "")
+                            $("#booked_from").text(bookedFrom?.toLocaleString() || "")
+                            $("#booked_to").text(bookedTo?.toLocaleString() || "")
                         }
                     })
                 }
 
                 function updateLiveStats() {
                     $.post("/api/admin/getStats", (data, response) => {
-                        console.log(data)
-                        console.log(response)
+                        // console.log(data)
+                        // console.log(response)
                         if (response == 'success') {
-                            console.log(data.available_count)
                             $("#total_count").text(data.total_count)
                             $("#available_count").text(String(data.available_count))
                             $("#occupied_count").text(String(data.occupied_count))
@@ -1478,6 +1483,17 @@ p
                     //     $(".hide").hide();
                     //     $(".mark20-txt").fadeIn(300);
                     // });
+
+
+                    $("#blockspaceid1").click(() => {
+                        console.log(currentSpace)
+                        $.post("/api/admin/toggleBlockSpace", {space_id : currentSpace}, (data, response) => {
+                            if (response == 'success') {
+                                console.log(data, response)
+                                getStatus(currentSpace)
+                            }
+                        })
+                    }) 
                 });
 
                 var circles = document.querySelectorAll(".svgcircle");
