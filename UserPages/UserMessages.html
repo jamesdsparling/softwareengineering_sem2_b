@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Messages</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="/stylesheet3.css" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Lato"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Montserrat"
+        />
+        <style>
+            body,
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-family: "Lato", sans-serif;
+            }
+
+            .w3-bar,
+            h1,
+            button {
+                font-family: "Montserrat", sans-serif;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        <div class="w3-top">
+            <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-large">
+                <a
+                    class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-blue-grey"
+                    href="javascript:void(0);"
+                    onclick="myFunction()"
+                    title="Toggle Navigation Menu"
+                    ><i class="fa fa-bars"></i
+                ></a>
+                <a
+                    href="/dashboard"
+                    class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
+                    >Dashboard</a
+                >
+                <a
+                    href="/tickets"
+                    class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
+                    >Manage Tickets</a
+                >
+                <a
+                    href="/addbalance"
+                    class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
+                    >Add Balance</a
+                >
+                <a
+                    href="/settings"
+                    class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
+                    >Settings</a
+                >
+                <a
+                    href="/messages"
+                    class="w3-bar-item w3-button w3-padding-large w3-white"
+                    >Messages</a
+                >
+            </div>
+
+            <!-- Header-->
+            <!--<header class="w3-container w3-blue w3-center">-->
+
+            <input
+                type="button"
+                value="Load messages"
+                class="messages"
+                id="fetchall"
+            />
+            <!-- Table -->
+
+            <div class="messages">
+                <!-- <div class="left">
+                    <h3>Messages recieved</h3>
+                </div>
+
+                <div class="right">
+                    <h3>Messages sent</h3>
+                </div> -->
+            </div>
+
+            <form class="second_form" id="sendMessage" method="POST" action="/api/sendMessage">
+                <label for="message">Message:</label>
+                <input
+                    type="text"
+                    id="message"
+                    name="message"
+                    placeholder="Type message"
+                />
+                <input type="submit" value="Send" />
+            </form>
+
+            <script>
+                function refreshMessages() {
+                    $.post("/api/me/messages", (response) => {
+                        // console.log(response);
+                        createMessages(response);
+                    });
+                }
+                refreshMessages()
+
+                $("#fetchall").click(() => {
+                        refreshMessages()
+                    });
+
+                //post request to get the messages
+                setInterval(() => {
+                   refreshMessages()
+                }, 1000);
+
+                function createMessages(response) {
+                    $(".messages").empty();
+                    response.forEach((message) => {
+                        //load messages as variables
+                        var chat_message = message.chat_message;
+                        var from_me = message.from_admin;
+
+                        //if message is from admin
+                        if (message.from_me) {
+                            // append to parent container
+                            $(".messages").append(
+                                '<div class="right"> <h3>' +
+                                    message.chat_message +
+                                    "</h3> </div> <br>"
+                            );
+                        }
+                        //if message is one the user has sent
+                        else {
+                            // append to parent container
+                            $(".messages").append(
+                                '<div class="left"> <h3>' +
+                                    message.chat_message +
+                                    "</h3> </div> <br>"
+                            );
+                        }
+                    });
+                }
+            </script>
+
+            <!-- Footer -->
+            <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+                <p>Created by Group 33</p>
+            </footer>
+        </div>
+    </body>
+</html>

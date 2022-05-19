@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Balance</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheet3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif
+        }
+
+        .w3-bar,
+        h1,
+        button {
+            font-family: "Montserrat", sans-serif
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-large">
+          <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-blue-grey" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+          <a href="/dashboard" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Dashboard</a>
+          <a href="/tickets" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Manage Tickets</a>
+          <a href="/addbalance" class="w3-bar-item w3-button w3-padding-large w3-white">Add Balance</a>
+          <a href="/settings" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Settings</a>
+          <a href="/messages" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Messages</a>
+        </div>
+
+        <!-- Header-->
+        <!--<header class="w3-container w3-blue w3-center">
+        <p class="usersettings" id ="fetchall" onclick="document.getElementById('paymentMethod').style.display = 'block'">View current payment method</p>
+        -->
+
+        <!--Table to show user their current card payment
+        <table id='paymentMethod'>
+          <thead>
+            <tr>
+              <th>Card number</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        -->
+
+        <p class="usersettings">Add balance</p>
+
+        <!-- form to add balance -->
+        <form class="second_form" method="POST" action="/api/me/addBalance">
+          <label for="amount">Amount to add:</label>
+          <input type="int" id="amount" name="amount" placeholder="£">
+
+          <label for="cvv">Confirm card cvv number:</label>
+          <input type="text" id="cvv" name="cvv" placeholder="cvv">
+
+          <input type="submit" value="Send">
+        </form>
+
+
+        <script>
+            $(document).ready(function() {
+
+                // Fetch all records
+                $('#fetchall').click(function() {
+                    // AJAX GET request
+                    $.ajax({
+                        type: 'post',
+                        url: '/api/me/profiles',
+                        dataType: 'json',
+                        data: {
+                            requestType: 'fetchall'
+                        },
+                        success: function(response) {
+                            console.log(response)
+                            createRows(response);
+                        }
+                    });
+                });
+            });
+
+            // Create table rows
+            function createRows(response) {
+                var len = 0;
+                $('#paymentMethod tbody').empty(); // Empty <tbody>
+                if (response != null) {
+                    len = response.length;
+                }
+                if (len > 0) {
+                    for (var i = 0; i < len; i++) {
+                        var cardnum = response[i].cardnumn;
+
+                        var tr_str = "<tr>" +
+                        "<td align='center'>" + id + "</td>" +
+                        +"</tr>";
+
+                        $("#paymentMethod tbody").append(tr_str);
+                    }
+                } else {
+                    var tr_str = "<tr>" +
+                        "<td align='center' colspan='4'>No payment method found.</td>" +
+                        "</tr>";
+
+                    $("#ticketTable tbody").append(tr_str);
+                }
+            }
+            </script>
+
+        <!-- Footer -->
+        <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+            <p>Created by Group 33 </p>
+        </footer>
+
+</body>
+
+
+</html>

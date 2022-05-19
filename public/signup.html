@@ -2,42 +2,94 @@
 <html lang="en">
 
 <head>
-    <title>Parking Management System</title>
-    <link rel="stylesheet" href="pms.css">
+    <title>Account Creation</title>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheet3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif
+        }
+        
+        .w3-bar,
+        h1,
+        button {
+            font-family: "Montserrat", sans-serif
+        }
+    </style>
 </head>
 
 <body>
+
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-blue-grey w3-card w3-left-align w3-large">
+            <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a href="Homepage.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Home</a>
+            <a href="signin.html" class="w3-bar-item w3-button w3-padding-large w3-white">Login</a>
+        </div>
+    </div>
+
+    <!--Header-->
+    <header class="w3-container w3-blue w3-center" style="padding:128px 16px">
+        <h1 class="w3-margin w3-jumbo">UEA Parking</h1>
+    </header>
+
     <div class="log-in">
         <form method="POST" action="/api/auth/signup">
             <h2>Create an account</h2>
 
+            <!-- 
             <label for="firstname">First Name</label>
             <input type="text" name="firstname" placeholder="First Name" required="">
 
             <label for="lastname">Last Name</label>
             <input type="text" name="lastname" placeholder="Last Name" required="">
+            -->
 
             <label for="email">Email</label>
             <input type="email" name="email" placeholder="Email" required="">
 
+            <!--
             <label for="phonenumber">Phone Number</label>
             <input type="tel" name="phonenumber" placeholder="Phone Number" required="">
+            -->
 
             <label for="password">Password</label>
             <input type="password" name="password" placeholder="Password" required="">
 
-            <label for="password">Confirm Password</label>
+            <label for="password2">Confirm Password</label>
             <input type="password" name="password2" placeholder="Confirm password" required="">
 
-            <button class="account">Create account</button>
+            <input type="submit" class="account" id="signin" value="Sign up" />
 
-            <a class="sign" href='signin.html'>Already have an account? sign in</a>
+            <a class="sign" href="signin.html">Already have an account? sign in</a>
         </form>
     </div>
 
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+        <p>Created by Group 33 </p>
+    </footer>
 </body>
 <footer>
 <div class="wrapper">
@@ -46,31 +98,4 @@
      <header>Allow Cookies</header>
      <p>We and a select group of trusted partners, known as 'Vendors', need your consent for data-processing purposes. These purposes include to store and/or access information on a device, like cookie management and to process personal data such as standard information sent by a device and other unique identifiers for personalised ads and content, ad and content measurement, audience insights and product development. With your consent we and our partners may use precise geolocation data and actively scan device characteristics for identification.
 
-You may consent to the processing described above or access more detailed information and customise your choices. The given consent will apply to this site only. Please take into consideration that some of your personal data processing may rely on legitimate interest which does not require your consent but you have a right to object to this.
-
-You can always edit your preferences at any time in our site’s privacy policy page</p>
-     <div class="buttons">
-       <button class="item">I understand</button>
-       <a href="#" class="item">Learn more</a>
-     </div>
-   </div>
- </div>
-
- <script>
-     const cookieBox = document.querySelector(".wrapper"),
-     acceptBtn = cookieBox.querySelector("button");
-     acceptBtn.onclick = ()=>{
-
-       document.cookie = "CookieBy=CodingNepal; max-age="+60*60*24*30;
-       if(document.cookie){
-         cookieBox.classList.add("hide");
-       }else{
-         alert("Cookie can't be set! Please unblock this site from the cookie setting of your browser.");
-       }
-     }
-     let checkCookie = document.cookie.indexOf("CookieBy=CodingNepal");
-     checkCookie != -1 ? cookieBox.classList.add("hide") : cookieBox.classList.remove("hide");
-   </script>
-
-</footer>
 </html>
